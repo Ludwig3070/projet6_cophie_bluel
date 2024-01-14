@@ -146,9 +146,24 @@ li:hover {
 #introduction p {
 	margin-bottom: 15px;
 	padding: 0 35px;/* ajout */
-	
-	
 }
+.button{/* ajout */
+	margin: 51px 180px;
+	font-family: Syne;
+	font-size: 16px;
+	font-weight: 700;
+	padding: 9px 28px;
+	border-radius:60px ;
+	border: 1px solid #1D6154;
+	background: white;
+	color: #1D6154;
+	cursor: pointer;
+}
+.button_active{	/* ajout */
+	background: #1D6154;
+	color: white;
+}
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
