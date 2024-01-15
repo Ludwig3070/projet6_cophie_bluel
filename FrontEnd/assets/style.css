@@ -147,12 +147,18 @@ li:hover {
 	margin-bottom: 15px;
 	padding: 0 35px;/* ajout */
 }
-.button{/* ajout */
+.search_categories{
 	margin: 51px 180px;
+	display: flex;
+	width: 100%;
+	gap: 10px;
+}
+.button{/* ajout */
+	min-width: 100px;
 	font-family: Syne;
 	font-size: 16px;
 	font-weight: 700;
-	padding: 9px 28px;
+	padding: 9px 10px;
 	border-radius:60px ;
 	border: 1px solid #1D6154;
 	background: white;
