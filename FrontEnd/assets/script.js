@@ -49,96 +49,45 @@ async function displayTous() {   /* affichage de "Tous" */
 
 
 /**
- * creer le DOM search_categrories sur indx.html
+ * creer le DOM search_categrories sur index.html
  */
 async function displayContentOfGallerySearch() {
     works_fetch.then(
-        r => {/* r est l'objet (ici un tableau) resultat de la promesse */
-            console.log(r)
-            
-            let gallery = document.querySelector(".search_categories")           
-            
-            //selection des objets dans l'ordre
-            let tableau = r.map(item => [item.category.id,item.category.name])//recupere un tableau avec des tableaux
-            /* console.log(tableau) */
-            let tabId=tableau.map(item=>item[0])
-            let tabName=tableau.map(item=>item[1])
-            /* console.log(tabId)
-            console.log(tabName) */
-            let setId = new Set(tabId)
-            let setName = new Set(tabName)
-            /* console.log(setId)
-            console.log(setName) */
-            tabId= Array.from(setId)
-            tabName= Array.from(setName)
-          /*   console.log(tabId)
-            console.log(tabName) */
-            tableau=[]
-            tableau=tabId.map((el,index) =>[el,tabName[index]])//syntaxe de ouf
-            console.log(tableau)
-            console.log("***********************************************")
-            tableau = r.map(item => [item.category])//recupere un tableau avec des tableaux
-            console.log(tableau)
-            for(i of tableau){console.log(i[0])}
-            let donnees =tableau.map(item =>item[0])
-            console.log(donnees)
+        (r) => { 
+            /* cette premiere partie de code permet de remplir search_categories avec les boutons dans le meme ordre que la maquette FIGMA sans utiliser une autre requete HTML
+            (http://localhost:5678/api/categories)+ GET */
 
-            donnees.sort(function (a, b) {
-                return a.id - b.id;
-              });
-              console.log(donnees)
-              console.log("**********************************************************")
+                let tableau = r.map(item => [item.category]); //recupere un tableau de tableaux avec les categories et id non ordonné
+                let donnees = tableau.map(item => item[0]);//donnees est un tableau d'OBJETS avec les categories et id non ordonné
+                delete tableau //liberation de la memoire
+                /* console.log(donnees); */
+                donnees.sort(function (a, b) {//tri du tableau avec id croissant
+                    return a.id - b.id;
+                });
+                /* console.log(donnees); */                           
+                let tab = [];//tableau provisoire pour traitement des données              
+                for (let i of donnees) {tab.push(i.name)}//remplissage du tableau avec les noms (STRING) des categories ordonnées mais avec les doublons
+                /* console.log(tab);  */           
+                let set = new Set(tab); //ce set permet d'enlever tous les doublons car tab est un tableau de STRING,avec des objets ça marche pas
+                console.log(set);
 
-            let tab=[]
-            let donnees3
-            for(let i in donnees){console.log(donnees[i])}
-            console.log("**********************************************************")
-            for(let i of donnees){
-                console.log(i.name)
-                tab.push(i.name)
-            }
-            console.log("**********************************************************")
-             console.log(tab)
-
-             let set = new Set (tab)
-             console.log(set)
-             
-            
-            
+            /* cette deuxieme partie de code permet de creer les boutons dans search_categorie selon le contenu de l'API à l'exception de bouton "tous crée en HTML" */
+            let gallery = document.querySelector(".search_categories"); 
         
-            
-
-            
-            
-           
-            
-            
-
-
-            
-           
-           /*  let tab2 = Array.from(setCategory)
-            let setTab2= new Set(tab2) */
-            
-            
-            
-           
-          /*   set.forEach((value)=>{
-                let button = document.createElement("button")
-                button.classList.add("button")
-                button.innerText = value
-                gallery.appendChild(button) 
-
-            })*/
+            set.forEach((value)=>{//parcours du set et creation de la suite pour chaque iteration
+              let button = document.createElement("button")//creation d'un bouton
+              button.classList.add("button")//ajout de la classe sur le bouton pour les "settings" d'affichage
+              button.innerText = value//ajout du texte de l'iteration de foreach
+              gallery.appendChild(button)})//creation du bouton dans le DOM apres avoir defini tous les parametres
         }
     )  
 }
 
 
  
+/* programme principal */
 
-
-let works_fetch = fetchWorks()/* works_fetch est une promesse qui contient le tableau d'objets à traiter,elle doit etre appelée en premier pour chercher les données sur le serveur */
+let works_fetch = fetchWorks()/* works_fetch est une promesse qui contient le tableau d'objets à traiter,elle doit etre appelée en premier pour chercher les données sur le serveur et pouvoir utiliser les fonctions */
 displayTous()
 displayContentOfGallerySearch()
 
