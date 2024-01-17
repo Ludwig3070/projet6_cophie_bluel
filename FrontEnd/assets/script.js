@@ -16,32 +16,26 @@ async function fetchWorks() {
     return r.ok ? await r.json() : alert('Serveur introuvable');/* si r.ok return r.json() sinon return alert */
 }
 
-/**
- * fonction qui retourne une promesse avec les categories pour index.html ou affiche une alerte si le serveur est tombé
- * @returns promise
- */
-async function fetchCategories() {
-    const r = await fetch("http://localhost:5678/api/categories");
-    return r.ok ? await r.json() : alert('Serveur introuvable');/* si r.ok return r.json() sinon return alert */
-}
+
 
 /**
  * affiche toutes les categories dans la galerie
  */
-async function displayTous() {   /* affichage de "Tous" */
+async function displayTous(arg=0) {   /* affichage de "Tous" */
     works_fetch.then(
-        worksArray => {/* worksArray est l'objet (ici un tableau) resultat de la promesse */
-            worksArray.map((item) => {
+        (worksArray) => {/* worksArray est l'objet (ici un tableau) resultat de la promesse */
+            worksArray.map((item) => {//iteration pour chaque item
+                if(arg===0){
                 let gallery = document.querySelector(".gallery")
                 let figure = document.createElement("figure")
                 gallery.appendChild(figure)/* ces deux  instructions creent les  balises figure */
-                let img = document.createElement("img")
-                img.src = item.imageUrl
-                img.alt = item.title
+                let img = document.createElement("img")//creation de la balise img
+                img.src = item.imageUrl //chemin de img
+                img.alt = item.title //texte alternatif de img
                 figure.appendChild(img)/* ces trois instructions ajoutent les images  */
                 let figcaption = document.createElement("figcaption")/* les trois prochaines instructions ajoutent figcaption et son texte  */
                 figcaption.innerText = item.title
-                figure.appendChild(figcaption)
+                figure.appendChild(figcaption)}
             })
         }
     )    
@@ -59,7 +53,6 @@ async function displayContentOfGallerySearch() {
 
                 let tableau = r.map(item => [item.category]); //recupere un tableau de tableaux avec les categories et id non ordonné
                 let donnees = tableau.map(item => item[0]);//donnees est un tableau d'OBJETS avec les categories et id non ordonné
-                delete tableau //liberation de la memoire
                 /* console.log(donnees); */
                 donnees.sort(function (a, b) {//tri du tableau avec id croissant
                     return a.id - b.id;
@@ -69,7 +62,7 @@ async function displayContentOfGallerySearch() {
                 for (let i of donnees) {tab.push(i.name)}//remplissage du tableau avec les noms (STRING) des categories ordonnées mais avec les doublons
                 /* console.log(tab);  */           
                 let set = new Set(tab); //ce set permet d'enlever tous les doublons car tab est un tableau de STRING,avec des objets ça marche pas
-                console.log(set);
+                /* console.log(set); */
 
             /* cette deuxieme partie de code permet de creer les boutons dans search_categorie selon le contenu de l'API à l'exception de bouton "tous crée en HTML" */
             let gallery = document.querySelector(".search_categories"); 
@@ -88,8 +81,9 @@ async function displayContentOfGallerySearch() {
 /* programme principal */
 
 let works_fetch = fetchWorks()/* works_fetch est une promesse qui contient le tableau d'objets à traiter,elle doit etre appelée en premier pour chercher les données sur le serveur et pouvoir utiliser les fonctions */
-displayTous()
-displayContentOfGallerySearch()
+
+displayContentOfGallerySearch()//appel fonction pour afficher les boutons de search
+displayTous()//affiche toutes les images
 
 
 
