@@ -61,10 +61,10 @@ main{
 header {
 	display: flex;
 	justify-content: space-between;
-	margin-top: 50px;/* modif */
-	margin-bottom: 139px;/* modif */
+	margin-top: 50px;/* amended */
+	margin-bottom: 139px;/* amended */
 }
-header h1 span {/* ajout */
+header h1 span {/* added */
 	margin-top: 2px;
 	text-transform: uppercase;
 }
@@ -104,10 +104,10 @@ nav ul {
 nav li {
 	
 	font-size: 16px;
-	font-weight: 400;/* ajout */	
+	font-weight: 400;/* added */	
 }
 
-li img {/* ajout */
+li img {/* added */
 	width: 15px;
 	margin: auto;
 		
@@ -139,13 +139,13 @@ li:hover {
 	
 }
 #introduction h2 {
-	margin-bottom: 19px;/* modif */
-	padding: 0 35px;/* ajout */
+	margin-bottom: 19px;/* amended */
+	padding: 0 35px;/* added */
 }
 
 #introduction p {
 	margin-bottom: 15px;
-	padding: 0 35px;/* ajout */
+	padding: 0 35px;/* added */
 }
 .search_categories{
 	margin: 51px 180px;
@@ -153,7 +153,7 @@ li:hover {
 	width: 100%;
 	gap: 10px;
 }
-.button{/* ajout */
+.button{/* added */
 	min-width: 100px;
 	font-family: Syne;
 	font-size: 16px;
@@ -165,7 +165,7 @@ li:hover {
 	color: #1D6154;
 	cursor: pointer;
 }
-.button_active{	/* ajout */
+.button_active{	/* added */
 	background: #1D6154;
 	color: white;
 }
@@ -173,7 +173,7 @@ li:hover {
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
-	margin-top: 139px;/* ajout */
+	margin-top: 139px;/* added */
 }
 .gallery {
 	width: 100%;

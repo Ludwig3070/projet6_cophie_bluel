@@ -1,90 +1,106 @@
- /* Ressources  https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener */
-    /* https://javascript.info/map-set#set */
+/* Ressources  https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener */
+/* https://javascript.info/map-set#set */
 
 
 
 
 
-/* recuperation des données sur le serveur */
+/* get data from the server */
 
 /**
- * fonction qui retourne une promesse avec les donnees de l'url ou une alert si le serveur est tombé
+ * function that returns a promise with url data or an alert if the server is down
  * @returns promise
  */
 async function fetchWorks() {
     const r = await fetch("http://localhost:5678/api/works");
-    return r.ok ? await r.json() : alert('Serveur introuvable');/* si r.ok return r.json() sinon return alert */
+    return r.ok ? await r.json() : alert('Serveur injoignable');/* si r.ok return r.json() else return alert */
 }
 
-
-
 /**
- * affiche toutes les categories dans la galerie
+ * 
+displays images in the gallery according to the category of the "arg" parameter (0=all)
+ * @param {number} arg 
  */
-async function displayTous(arg=0) {   /* affichage de "Tous" */
-    works_fetch.then(
-        (worksArray) => {/* worksArray est l'objet (ici un tableau) resultat de la promesse */
-            worksArray.map((item) => {//iteration pour chaque item
-                if(arg===0){
-                let gallery = document.querySelector(".gallery")
-                let figure = document.createElement("figure")
-                gallery.appendChild(figure)/* ces deux  instructions creent les  balises figure */
-                let img = document.createElement("img")//creation de la balise img
-                img.src = item.imageUrl //chemin de img
-                img.alt = item.title //texte alternatif de img
-                figure.appendChild(img)/* ces trois instructions ajoutent les images  */
-                let figcaption = document.createElement("figcaption")/* les trois prochaines instructions ajoutent figcaption et son texte  */
-                figcaption.innerText = item.title
-                figure.appendChild(figcaption)}
+async function displayGallery(arg) {
+    works_fetch.then(//promise of works_fetch accepted
+        (worksArray) => {/* worksArray is the object (here an array) result of the promise */
+            worksArray.map((item) => {//iteration for each item
+                /**
+               * displays images in the gallery for each item 
+               */
+                function display() {//internal function available only here which is used to optimise code 
+                    let gallery = document.querySelector(".gallery")
+                    let figure = document.createElement("figure")
+                    gallery.appendChild(figure)/* these instructions create the tags figure */
+                    let img = document.createElement("img")//create tag img
+                    img.src = item.imageUrl //path of img
+                    img.alt = item.title //alternative text of img
+                    figure.appendChild(img)/* these instructions add images in figure */
+                    let figcaption = document.createElement("figcaption")/* the next three instructions add figcaption and its text  */
+                    figcaption.innerText = item.title
+                    figure.appendChild(figcaption)
+                }
+                /* end of function display */
+                if (!arg) { display() }//select and display the correpondant content of argument
+                else { item.categoryId === arg ? display() : null }
             })
         }
-    )    
-}/* fin de la fonction d'affichage de "TOUS" */
-
-
-/**
- * creer le DOM search_categrories sur index.html
- */
-async function displayContentOfGallerySearch() {
-    works_fetch.then(
-        (r) => { 
-            /* cette premiere partie de code permet de remplir search_categories avec les boutons dans le meme ordre que la maquette FIGMA sans utiliser une autre requete HTML
-            (http://localhost:5678/api/categories)+ GET */
-
-                let tableau = r.map(item => [item.category]); //recupere un tableau de tableaux avec les categories et id non ordonné
-                let donnees = tableau.map(item => item[0]);//donnees est un tableau d'OBJETS avec les categories et id non ordonné
-                /* console.log(donnees); */
-                donnees.sort(function (a, b) {//tri du tableau avec id croissant
-                    return a.id - b.id;
-                });
-                /* console.log(donnees); */                           
-                let tab = [];//tableau provisoire pour traitement des données              
-                for (let i of donnees) {tab.push(i.name)}//remplissage du tableau avec les noms (STRING) des categories ordonnées mais avec les doublons
-                /* console.log(tab);  */           
-                let set = new Set(tab); //ce set permet d'enlever tous les doublons car tab est un tableau de STRING,avec des objets ça marche pas
-                /* console.log(set); */
-
-            /* cette deuxieme partie de code permet de creer les boutons dans search_categorie selon le contenu de l'API à l'exception de bouton "tous crée en HTML" */
-            let gallery = document.querySelector(".search_categories"); 
-        
-            set.forEach((value)=>{//parcours du set et creation de la suite pour chaque iteration
-              let button = document.createElement("button")//creation d'un bouton
-              button.classList.add("button")//ajout de la classe sur le bouton pour les "settings" d'affichage
-              button.innerText = value//ajout du texte de l'iteration de foreach
-              gallery.appendChild(button)})//creation du bouton dans le DOM apres avoir defini tous les parametres
-        }
-    )  
+    )
 }
 
 
- 
+/**
+ * create the search_categrories DOM on index.htm
+ */
+async function displayGallerySearch() {
+    works_fetch.then(
+        (r) => {
+            /* this first part of code allows you to fill search_categories with the buttons in the same order as the FIGMA model without using another HTML request
+            (http://localhost:5678/api/categories)+ GET */
+
+            let array1 = r.map(item => [item.category]); //make an array of arrays with categories and unordered id
+            let datas = array1.map(item => item[0]);//data is an array of OBJECTS with unordered categories and id
+            /* console.log(datas); */
+            datas.sort(function (a, b) {//sorting array with ascending id
+                return a.id - b.id;
+            });
+            /* console.log(datas); */
+            let tab = [];//provisional array for data processing             
+            for (let i of datas) { tab.push(i.name) }//filling the table with the names (STRING) of the ordered categories but with duplicates
+            /* console.log(tab);  */
+            let set = new Set(tab); //this set remove all duplicates (because tab is an array of STRINGs, with objects it doesn't work)
+            /* console.log(set); */
+
+            /* this second part of code create the buttons in search_categorie  */
+            let gallerySearch = document.querySelector(".search_categories");
+
+            set.forEach((value) => {//create sequence for each iteration
+                let button = document.createElement("button")//create a button
+                button.classList.add("button")//add class on the button             
+                button.innerText = value//add txt on the button
+                gallerySearch.appendChild(button)
+            })//create the button of the DOM
+        }
+    )
+}
+
+
+
+
 /* programme principal */
 
-let works_fetch = fetchWorks()/* works_fetch est une promesse qui contient le tableau d'objets à traiter,elle doit etre appelée en premier pour chercher les données sur le serveur et pouvoir utiliser les fonctions */
+let works_fetch = fetchWorks()/* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 
-displayContentOfGallerySearch()//appel fonction pour afficher les boutons de search
-displayTous()//affiche toutes les images
+displayGallerySearch()//call function to display search buttons
+displayGallery()//displays all images
 
 
+
+
+/* click management on buttons */
+/* pimple recovery */
+let buttons = document.querySelectorAll(".button")
+console.log(buttons)
+buttons.forEach(v=>console.log(v))
 
 
