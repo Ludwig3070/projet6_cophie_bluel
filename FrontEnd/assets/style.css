@@ -54,10 +54,20 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
+.body_login{/* added */
+	height: auto;
+	overflow: hidden;
+}
+
 main{
 	max-width: 920px;
 	margin: auto;
+	/* display: none; */
 }
+.main_login{/* added */
+	margin-top: 150px;
+	}
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -113,8 +123,19 @@ li img {/* added */
 		
 }
 
+li a {/* added */
+	text-decoration: none;
+	color: black;
 
-li:hover {
+}
+
+.li_login {/* added */
+	font-weight: 600;
+	}
+
+
+li:hover,
+li a:hover {
 	color: #B1663C;
 }
 #introduction {
@@ -187,34 +208,49 @@ li:hover {
 	width: 100%;
 
 }
-#contact {
+#contact,
+#login {/* amended */
 	width: 50%;
 margin: auto;
 }
-#contact > * {
-	text-align: center;
 
+#contact > *,
+#login >* {/* amended */
+	text-align: center;
 }
-#contact h2{
+
+#contact h2,
+#login h2{/* amended */
 	margin-bottom: 20px;
 }
-#contact form {
+#contact form,
+#login form {/* amended */
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
+#contact form a,
+#login form a {/* added */
+	color: #3D3D3D;
+	text-align: center;
+	margin-bottom: 355px;	
+}
 
-#contact input {
+
+#contact input,
+#login input {/* amended */
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label,
+#mogin label {/* amended */
 	margin: 2em 0 1em 0;
 }
-#contact textarea {
+#contact textarea,
+#login textarea {/* amended */
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
@@ -229,10 +265,14 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
+.none{
+	display: none;
+}
 
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin: 2em;
+	
 }
 
