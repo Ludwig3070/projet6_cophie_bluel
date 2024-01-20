@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	
 }
 ol, ul {
 	list-style: none;
@@ -54,27 +55,26 @@ body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
 }
-.body_login{/* added */
-	height: auto;
-	overflow: hidden;
-}
+
 
 main{
 	max-width: 920px;
-	margin: auto;
-	/* display: none; */
+	margin: auto;	
 }
-.main_login{/* added */
-	margin-top: 150px;
-	}
 
-header {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 50px;/* amended */
+header{
 	margin-bottom: 139px;/* amended */
 }
-header h1 span {/* added */
+#header {/* added */
+	display: flex;
+	justify-content: space-between;
+	
+}
+.margin_top{/* added */
+	margin-top: 100px;
+}
+
+#header h1 span {
 	margin-top: 2px;
 	text-transform: uppercase;
 }
@@ -129,7 +129,7 @@ li a {/* added */
 
 }
 
-.li_login {/* added */
+.li_logout {/* added */
 	font-weight: 600;
 	}
 
@@ -191,6 +191,7 @@ li a:hover {
 	color: white;
 }
 
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
@@ -246,7 +247,7 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 #contact label,
-#mogin label {/* amended */
+#login label {/* amended */
 	margin: 2em 0 1em 0;
 }
 #contact textarea,
@@ -265,9 +266,27 @@ input[type="submit"]{
 	text-align: center;
 	border-radius: 60px ;
 }
-.none{
-	display: none;
+.edition_mode{/* added */
+	background-color: black;
+	height: 50px;
+	width: 100vw;
+	margin: 0;
+	display: flex;
+	color: white;
+	justify-content: center;
+	align-items: center;
+	column-gap: 10px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+
 }
+.none{
+	opacity: 0;
+}
+
 
 footer nav ul {
 	display: flex;
@@ -275,4 +294,5 @@ footer nav ul {
 	margin: 2em;
 	
 }
+
 

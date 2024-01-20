@@ -100,26 +100,50 @@ async function displayGallerySearch() {
 }
 
 
-
+/*https://developer.mozilla.org/fr/docs/Web/API/DOMTokenList/toggle */
+/* https://www.alsacreations.com/actu/lire/1776-element-main-html5.html */
+/* https://www.youtube.com/watch?v=I_UnFEkJsC8 */
+/* https://developer.mozilla.org/fr/docs/Web/API/HTMLElement/hidden */
+/* https://stackoverflow.com/questions/58031311/toggle-text-in-button-onclick */
 /**
- * this fonction toggles displays of index_section and login_section
- * @param {Array} index_section 
- * @param {string} login_section 
+ * this fonction toggles displays of index_section and login_section,it manages click event to
+ * 
  */
-async function displayLogin(){
-    const index_section=[introduction,portfolio,contact]
-    const Login_section=[login]
-    for(let i of index_section){
-        let a = document.getElementById(`${i}`)
-       /*  a.classList.add("none") */
-       console.log(a)
-    }
-   
-    const login_section = document.getElementById("login")
-    /* login_section.classList.remove("none") */
+async function loginListenenerAndToggle(){
+    const nav_login = document.getElementById("nav_login")
+        nav_login.addEventListener("click",()=>{
+        /* variables */
+        const edition_mode = document.querySelector(".edition_mode")
+        const header = document.getElementById("header")
+        const mains =document.querySelectorAll("main") //it is a nodelist with 2 tags main 
+        /* this first loop manages click on nav login */      
+        if(nav_login.innerHTML==="login"){
+            nav_login.innerHTML="logout"//toggle login/logout
+            nav_login.classList.add("li_logout")//toggle css on nav login/logout
+            edition_mode.classList.remove("none")// remove class none (toggle)
+            header.classList.add("margin_top")//add margin-top=100px  50px--->100px            
+        }
+        else{
+            nav_login.innerHTML="login"//toggle login/logout
+            nav_login.classList.remove("li_logout")//toggle css on nav login/logout
+            edition_mode.classList.add("none")// add class none (toggle)
+            header.classList.remove("margin_top")//  remove margin-top=100px-->50px
+        } 
+        
+        /* this second loop toggles the attribte hidden */
+        mains.forEach(main=>main.toggleAttribute("hidden"))//very good    
+      
+
+    })
+
 
     
-
+   
+    
+    
+  
+    
+        
 }
 
 
@@ -131,10 +155,11 @@ let works_fetch = fetchWorks()/* works_fetch is a promise which contains the arr
 
 displayGallerySearch()//call function to display search buttons,this function manage clicks on buttons too,there's no other way  
 displayGallery()//displays all images
+loginListenenerAndToggle()//manages login if necessary
 
-const login_button = document.getElementById("nav_login")
 
-login_button.addEventListener ("click",displayLogin())
+
+
 
 
 
