@@ -265,6 +265,7 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;/* added */
 }
 .edition_mode{/* added */
 	background-color: black;
@@ -283,8 +284,18 @@ input[type="submit"]{
 	bottom: 0;
 
 }
-.none{
+.none{/* added */
 	opacity: 0;
+}
+.supervisor_access{/* added */
+	color: black;
+	font-size: 14px;
+	font-weight: 400;
+	margin-left: 31px;
+	cursor: pointer;
+}
+.deleted{/* added */
+	display: none;
 }
 
 
