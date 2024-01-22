@@ -70,7 +70,7 @@ header{
 	justify-content: space-between;
 	
 }
-.margin_top{/* added */
+.margin_top_100px{/* added */
 	margin-top: 100px;
 }
 
@@ -174,7 +174,8 @@ li a:hover {
 	width: 100%;
 	gap: 10px;
 }
-.button{/* added */
+.button,
+.modal_button{/* added */
 	min-width: 100px;
 	font-family: Syne;
 	font-size: 16px;
