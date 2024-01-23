@@ -27,6 +27,7 @@ async function fetchWorks() {
         : alert(
             "Serveur injoignable"
         ); /* si r.ok return r.json() else return alert */
+        
 }
 
 /**
@@ -63,21 +64,22 @@ async function autenthication_request(mail, password) {
 /**
  * 
 displays images in the gallery according to the category of the "arg" parameter (0=all) (for main code)
- * @param {number} arg 
+ * @param {number} arg categorie to be display on gallery
  */
-async function displayGallery(arg) {
+async function displayGallery(arg,arg2='.gallery',arg3 = 0) {
     works_fetch.then(
         //promise of works_fetch accepted
         (worksArray) => {
             /* worksArray is the object (here an array) result of the promise */
-            let gallery = document.querySelector(".gallery");
+            let gallery = document.querySelector(arg2);
             gallery.innerHTML = ""; //erase the gallery before traitment,usefull in others parts of code
             worksArray.map((item) => {//iteration for each item
                 
                 /**
                  * displays images in the gallery for each item
                  */
-                function display() {
+                function display(arg3) {
+                    
                     //internal function available only here which is used to optimise code
                     let figure = document.createElement("figure");
                     gallery.appendChild(figure); /* these instructions create the tags figure */
@@ -88,9 +90,19 @@ async function displayGallery(arg) {
                     let figcaption =document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
                     figcaption.innerText = item.title;
                     figure.appendChild(figcaption);
+                    if (arg3===1) {
+                        let logo = document.createElement("img")
+                        logo.src="./assets/icons/trash-can-solid.svg"
+                        logo.classList.add("trash_img")
+                        let div = document.createElement("div")
+                        div.classList.add("trash")
+                        div.setAttribute("data-id", item.id)
+                        figure.appendChild(div)
+                        div.appendChild(logo)
+                    }
                 }/* end of function display */
 
-                if (!arg) {display();} //select and display the correpondant content of argument
+                if (!arg) {display(arg3);} //select and display the correpondant content of argument
                 else {
                     item.categoryId === arg ? display() : null;
                 }
@@ -101,13 +113,21 @@ async function displayGallery(arg) {
 /**
  * create the search_categrories DOM on index.htm (for main code) (very big function)
  */
-async function displayGallerySearch() {
+async function displayGallerySearch() {      
+    
+    //treatment of errors
+    works_fetch.catch((error) => {
+        /* manages problems of network */
+        alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`);
+    });
+    
     works_fetch.then((r) => {
         /* this first part of code allows you to fill search_categories with the buttons in the same order as the FIGMA model without using another HTML request
-                        (http://localhost:5678/api/categories)+ GET */
+        (http://localhost:5678/api/categories)+ GET */
 
         let array1 = r.map((item) => [item.category]); //make an array of arrays with categories and unordered id
         let datas = array1.map((item) => item[0]); //data is an array of OBJECTS with unordered categories and id
+        sessionStorage.setItem("datas",JSON.stringify(datas))//store datas on session storage, delete further if don't used
         /* console.log(datas); */
         datas.sort(function (a, b) {
             //sorting array with ascending id
@@ -133,29 +153,32 @@ async function displayGallerySearch() {
             button.setAttribute("data-id", i);
             gallerySearch.appendChild(button);
             i++;
-        }); //create the buttons of the DOM --->END
+        }); //create the buttons in the gallery-categorie-search-bar
 
         /* this third part of code manages buttons on click */
         let buttons = document.querySelectorAll(".search_categories button");
-
+        /**
+         * remove class button_active on all buttons and put active_class on the correspondant value of function change(value)
+         * @param {number} value is a dataset id
+         */
         function change(value) {
             let val = Number(value); //transforms value into number
             buttons.forEach((v) => v.classList.remove("button_active")); //remove active class
             buttons[val].classList.add("button_active"); //add active class on the active button
         }
-        for (let item of buttons) {
+        for (let item of buttons) {//iterates all buttons to put an event on each button
             item.addEventListener("click", () => {
-                change(item.dataset.id);
-                displayGallery(Number(item.dataset.id));
+                change(item.dataset.id);// put class button_active on the button which was clicked
+                displayGallery(Number(item.dataset.id));//display the gallery of the correspondant button clicked
             });
-        } //for each iteration => function change
+        } 
     });
 }
 
 /**
  * swap main    main(hidden) <--->main vice versa + include fontweight toggle of login/logout on the header
  */
-function main_toggle(){
+function main_hiddenmain_toggle(){
     const mains = document.querySelectorAll("main"); //it is a nodelist with 2 tags main
     mains.forEach((main) => main.toggleAttribute("hidden")); //toggles the attribte hidden
     nav_login_weight_toggle()
@@ -171,104 +194,132 @@ function nav_login_weight_toggle(){
 /**
  * toggle display of edition mode in the header (opacity 0 <---> 1)
  */
-function edition_mode_toggle(){
+function header_edition_mode_bar_toggle(){
     const edition_mode = document.querySelector(".edition_mode");
     const header = document.getElementById("header");
     edition_mode.classList.contains("none") ? edition_mode.classList.remove("none") : edition_mode.classList.add("none")
     header.classList.contains("margin_top_100px") ? header.classList.remove("margin_top_100px") : header.classList.add("margin_top_100px")
 }
-/**
- * move on off and vice versa the display of this button
- */
-function modify_button_toggle_display(){
-    const modify_button = document.querySelector(".supervisor_access")
-    modify_button.classList.contains("deleted") ? modify_button.classList.remove("deleted") : modify_button.classList.add("deleted")
-}
 
+/**
+ * toggle logout/login text on the header and vice versa
+ */
 function nav_log_out_in_toggle(){
     let nav_login = document.getElementById("nav_login");
     nav_login.innerText === "logout" ? nav_login.innerHTML = "login" : nav_login.innerHTML = "logout"
 }
 /**
+ * toggle class deleted on logo supervisor_access used in editor mode
+ */
+function supervisor_access_toggle(){
+    const supervisor_access_image = document.querySelector(".supervisor_access")
+    supervisor_access_image.classList.toggle("deleted")
+}
+/**
  * used with event on click on the editor mode only, don't use it somewhere else 
  */
 function return_to_basic_mode(){
-    const nav_login = document.getElementById("nav_login");
-    modify_button_toggle_display()
-    edition_mode_toggle()
-    nav_log_out_in_toggle()
+    const nav_login = document.getElementById("nav_login");//necessary for the two last line of code
+   
+    header_edition_mode_bar_toggle()//display off the edition mode bar on the header
+    nav_log_out_in_toggle() //display login on the header (logout--->login)
+    gallery_search_categories_toggle_deleted()//display the gallery_search_categories on
     nav_login.removeEventListener("click",return_to_basic_mode)//remove effect on button login/logout 
-    nav_login.addEventListener("click", main_toggle);//manages click on login/logout on the header of the website
+    nav_login.addEventListener("click", main_hiddenmain_toggle);//get ready click to toggle main
 }
 /**
  * toggle display on search_categories
  */
-function search_categories_toggle_deleted(){
+function gallery_search_categories_toggle_deleted(){
     const search_categories = document.querySelector(".search_categories")
     search_categories.classList.toggle("deleted") 
+}
+/**
+ * this fonction is used to be ready to go to the editor mode whith a click on login,only used when the editor mode is running
+ */
+function go_to_editor_mode(){
+    const nav_login = document.getElementById("nav_login");
+      /* this next code do modifications and return on the website in editor mode */
+      
+      nav_log_out_in_toggle()// --->login on the website-page-header becomes logout                
+      nav_login.removeEventListener("click",main_hiddenmain_toggle)//remove action of the  login/logout button of the header              
+      main_hiddenmain_toggle()/* go to the editor-main-mode */               
+      header_edition_mode_bar_toggle()// move on display of header edition mode
+      gallery_search_categories_toggle_deleted()
+      supervisor_access_toggle()
+      nav_login.addEventListener("click", return_to_basic_mode);//manages click on login/logout on the header of the website
 }
 
 
 /**
- * this fonction toggles displays of index_section and login_section,it manages click event to
+ * manages submit button to get autenthication,manages login button to return to the website before submit if necessary,goes to editor mode if autenthication is successfull
  *
  */
-async function loginListenenerAndToggle() {
-    /* hidden code, mode editor */
-    /* this listener manages the login window and opens the edition window for authentification */
-    const nav_login = document.getElementById("nav_login");
-    const mains = document.querySelectorAll("main"); //it is a nodelist with 2 tags main    
+async function autenthication_to_editor_mode() {
     
-
-    nav_login.addEventListener("click", main_toggle);//manages click on login/logout on the header of the website
+    const nav_login = document.getElementById("nav_login");   
+    nav_login.addEventListener("click", main_hiddenmain_toggle);//manages click on login/logout on the header of the website
         
     /* manages click on submit for autenthication */
-    document.forms["editor_form"].addEventListener("submit", function (event) {//manages click on form submit "se connecter"
-        
+    document.forms["editor_form"].addEventListener("submit", function (event) {//manages click on form submit "se connecter"        
         event.preventDefault();
-        let server_request = autenthication_request(//call function autenthication_request with 2 parameters inside the form
+        let server_autenthication_request = autenthication_request(//call function autenthication_request with 2 parameters inside the form
             document.forms["editor_form"]["editor_email"]["value"],
             document.forms["editor_form"]["editor_password"]["value"]
         );
 
-        server_request.catch((error) => {//treatment of error
+        //treatment of errors
+        server_autenthication_request.catch((error) => {
             /* manages problems of network */
-            alert(
-                `${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`
-            );
+            alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`);
         });
-
-        server_request.then(//treatment of api response
-            /* response is an object with userid and token */
-            /* in this part of code acces is confirmed so it can manage a new stage */
-            (response) => {
-                access_datas = response;//store userId and token on acces_datas
-                console.log(access_datas);
-                console.log(access_datas.token);
-                console.log(access_datas.userId);
-
-                /* this next code do modifications and return on the website in editor mode */
-                modify_button_toggle_display()//--->move on display of this "button"
-                nav_log_out_in_toggle()// --->login on the website page becomes logout                
-                nav_login.removeEventListener("click",main_toggle)//remove effect on button login/logout               
-                main_toggle()/* to return on the other main with editor mode */               
-                edition_mode_toggle()// move on display of header edition mode
-                search_categories_toggle_deleted()
-                nav_login.addEventListener("click", return_to_basic_mode);//manages click on login/logout on the header of the website
-            }
-        );
-    });
-    
+        //treatment of api response
+        server_autenthication_request.then(/* response is an object with userid and token */           
+                response => {/* in this part of code acces is confirmed so it can manage a new stage */
+                                        
+                    sessionStorage.setItem("userId",response.userId)//store userId on session storage
+                    sessionStorage.setItem("token",response.token)//store token on session storage
+                    console.log("userId : ",sessionStorage.getItem("userId"))
+                    console.log("token : ",sessionStorage.getItem("token"))
+                    works_fetch.then(r=>console.log("in autenthication_to_editor_mode works_fetch.then()",r))//fonctionne,   pas besoin du storage
+                    
+                    
+                    
+                    
+                    go_to_editor_mode()//display editor mode
+                                
+                }
+            );
+    });    
 }
 
 /* main code */
 
-let works_fetch =
-    fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
-let access_datas; // for hidden code
+let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way
 displayGallery(); //displays all images
-loginListenenerAndToggle(); //manages login if necessary
+autenthication_to_editor_mode(); //manages login if necessary
+/* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtained from the session store */
+/* works_fetch.then(r=>console.log("in main code works_fetch.then()",r))//fonctionne ici */
+
+
+let tag = ".gallery_photos"
+displayGallery( 0, tag , 1 )
 
 
 
+
+
+
+/* let g = document.querySelector(".gallery_photos")
+console.log(g.childNodes)
+let p= g.childNodes
+q=Array.from(p)
+console.log(q)//node list 
+for (let i of q){console.log(i)}//tableau vide
+
+let y =g.children
+console.log(y)
+console.log(y[0])// undefined
+console.log(y.firstElementChild)// undefined
+ */
