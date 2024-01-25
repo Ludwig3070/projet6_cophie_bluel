@@ -10,6 +10,7 @@
     transform: translateX(-50%) translateY(-40%);
     background-color: #fff;
     border-radius: 10px;
+    z-index: 100;
 
 }
 
@@ -88,3 +89,19 @@
     
     
 }
+.no_visible{
+    visibility: hidden;
+}
+.cover_page{
+    display: block;
+	background: rgba(0, 0, 0, 0.4);	
+	position: fixed;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;  
+  
+    
+}
+

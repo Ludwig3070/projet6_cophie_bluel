@@ -66,7 +66,7 @@ async function autenthication_request(mail, password) {
 displays images in the gallery according to the category of the "arg" parameter (0=all) (for main code)
  * @param {number} arg categorie to be display on gallery
  */
-async function displayGallery(arg,arg2='.gallery',arg3 = 0) {
+function displayGallery(arg,arg2='.gallery',arg3 = 0) {
     works_fetch.then(
         //promise of works_fetch accepted
         (worksArray) => {
@@ -113,7 +113,7 @@ async function displayGallery(arg,arg2='.gallery',arg3 = 0) {
 /**
  * create the search_categrories DOM on index.htm (for main code) (very big function)
  */
-async function displayGallerySearch() {      
+function displayGallerySearch() {      
     
     //treatment of errors
     works_fetch.catch((error) => {
@@ -223,7 +223,9 @@ function return_to_basic_mode(){
    
     header_edition_mode_bar_toggle()//display off the edition mode bar on the header
     nav_log_out_in_toggle() //display login on the header (logout--->login)
-    gallery_search_categories_toggle_deleted()//display the gallery_search_categories on
+    gallery_search_categories_toggle_deleted()//move the gallery_search_categories on
+    supervisor_access_toggle()//manage button "modifier" (delete it)
+
     nav_login.removeEventListener("click",return_to_basic_mode)//remove effect on button login/logout 
     nav_login.addEventListener("click", main_hiddenmain_toggle);//get ready click to toggle main
 }
@@ -235,19 +237,48 @@ function gallery_search_categories_toggle_deleted(){
     search_categories.classList.toggle("deleted") 
 }
 /**
+ * move display modal on
+ */
+function modal_on(){
+    console.log("modal ok")
+    const body = document.querySelector("body") //get the first main tag
+    const cover_page = document.createElement("div")
+    const modal = document.querySelector(".modal")
+    cover_page.classList.add("cover_page")
+    body.appendChild(cover_page)//create a new page over index.html
+    modal.classList.remove("no_visible") // display on modal
+    const modal_close1 = document.querySelector(".close")     
+    const modal_close2 = document.querySelector(".cover_page") 
+    modal_close1.addEventListener("click",modal_off)    
+    modal_close2.addEventListener("click",modal_off)
+    }
+
+function modal_off(){
+    const body = document.querySelector("body") //get the first main tag
+    const cover_page = document.querySelector(".cover_page")
+    const modal = document.querySelector(".modal")
+    cover_page.remove()//delete page over index.html
+    modal.classList.add("no_visible") // display off modal 
+
+}
+
+/**
  * this fonction is used to be ready to go to the editor mode whith a click on login,only used when the editor mode is running
  */
 function go_to_editor_mode(){
     const nav_login = document.getElementById("nav_login");
+    const supervisor_access = document.querySelector(".supervisor_access")
       /* this next code do modifications and return on the website in editor mode */
       
       nav_log_out_in_toggle()// --->login on the website-page-header becomes logout                
       nav_login.removeEventListener("click",main_hiddenmain_toggle)//remove action of the  login/logout button of the header              
       main_hiddenmain_toggle()/* go to the editor-main-mode */               
       header_edition_mode_bar_toggle()// move on display of header edition mode
-      gallery_search_categories_toggle_deleted()
-      supervisor_access_toggle()
+      gallery_search_categories_toggle_deleted()//delete display og gallery search
+      supervisor_access_toggle()//move on dosplay of the button "modifier"
       nav_login.addEventListener("click", return_to_basic_mode);//manages click on login/logout on the header of the website
+      supervisor_access.addEventListener("click", modal_on);//manages click to move modal on
+    
 }
 
 
@@ -255,7 +286,7 @@ function go_to_editor_mode(){
  * manages submit button to get autenthication,manages login button to return to the website before submit if necessary,goes to editor mode if autenthication is successfull
  *
  */
-async function autenthication_to_editor_mode() {
+function go_to_autenthication_editor() {
     
     const nav_login = document.getElementById("nav_login");   
     nav_login.addEventListener("click", main_hiddenmain_toggle);//manages click on login/logout on the header of the website
@@ -298,13 +329,11 @@ async function autenthication_to_editor_mode() {
 let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way
 displayGallery(); //displays all images
-autenthication_to_editor_mode(); //manages login if necessary
+go_to_autenthication_editor(); //manages login if necessary
 /* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtained from the session store */
 /* works_fetch.then(r=>console.log("in main code works_fetch.then()",r))//fonctionne ici */
-
-
 let tag = ".gallery_photos"
-displayGallery( 0, tag , 1 )
+displayGallery( 0, tag , 1 )//gallery display in modal
 
 
 

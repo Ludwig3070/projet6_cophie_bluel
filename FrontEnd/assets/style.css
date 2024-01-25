@@ -31,6 +31,7 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	
+	
 }
 ol, ul {
 	list-style: none;
@@ -54,12 +55,14 @@ body {
 	margin:auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	
 }
 
 
 main{
 	max-width: 920px;
-	margin: auto;	
+	margin: auto;
+	
 }
 
 header{
@@ -303,8 +306,6 @@ input[type="submit"]{
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em;
-	
+	margin: 2em;	
 }
-
 
