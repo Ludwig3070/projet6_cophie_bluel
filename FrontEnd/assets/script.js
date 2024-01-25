@@ -240,7 +240,6 @@ function gallery_search_categories_toggle_deleted(){
  * move display modal on
  */
 function modal_on(){
-    console.log("modal ok")
     const body = document.querySelector("body") //get the first main tag
     const cover_page = document.createElement("div")
     const modal = document.querySelector(".modal")
@@ -248,19 +247,44 @@ function modal_on(){
     body.appendChild(cover_page)//create a new page over index.html
     modal.classList.remove("no_visible") // display on modal
     const modal_close1 = document.querySelector(".close")     
-    const modal_close2 = document.querySelector(".cover_page") 
-    modal_close1.addEventListener("click",modal_off)    
-    modal_close2.addEventListener("click",modal_off)
+    const modal_close2 = document.querySelector(".cover_page")
+    const button_add_picture = document.querySelector('.modal_button') 
+    modal_close1.addEventListener("click",modal_off) //make the click active on button 'close'   
+    modal_close2.addEventListener("click",modal_off)//make the click active 
+    button_add_picture.addEventListener("click",modal2_on)
     }
-
+/**
+ * move display modal off
+ */
 function modal_off(){
     const body = document.querySelector("body") //get the first main tag
     const cover_page = document.querySelector(".cover_page")
     const modal = document.querySelector(".modal")
     cover_page.remove()//delete page over index.html
     modal.classList.add("no_visible") // display off modal 
-
 }
+function modal2_on(){
+    
+    const modal_close1 = document.querySelector(".close")     
+    const modal_close2 = document.querySelector(".cover_page")
+    const modal_gallery_photos = document.querySelector('.gallery_photos')
+    modal_close1.removeEventListener("click",modal_off) //make the click inactive on button 'close'   
+    modal_close2.removeEventListener("click",modal_off)//make the click inactive 
+    const modal = document.querySelector(".modal")
+    const modal_old = modal.innerHTML
+    console.log(modal_old)
+    const modal_h2 = modal.querySelector("h2")    
+    modal_h2.innerText =" Ajout photo"//change text of modal h2
+    modal_gallery_photos.innerHTML=""
+    modal_gallery_photos.classList.add("modal2_get_photo_canva")
+    modal_gallery_photos.classList.remove("gallery_photos")
+    
+
+
+
+    
+}
+
 
 /**
  * this fonction is used to be ready to go to the editor mode whith a click on login,only used when the editor mode is running
@@ -312,13 +336,8 @@ function go_to_autenthication_editor() {
                     sessionStorage.setItem("token",response.token)//store token on session storage
                     console.log("userId : ",sessionStorage.getItem("userId"))
                     console.log("token : ",sessionStorage.getItem("token"))
-                    works_fetch.then(r=>console.log("in autenthication_to_editor_mode works_fetch.then()",r))//fonctionne,   pas besoin du storage
-                    
-                    
-                    
-                    
-                    go_to_editor_mode()//display editor mode
-                                
+                    works_fetch.then(r=>console.log("in autenthication_to_editor_mode works_fetch.then()",r))//fonctionne,   pas besoin du storage               
+                    go_to_editor_mode()//display editor mode                                
                 }
             );
     });    
@@ -339,16 +358,3 @@ displayGallery( 0, tag , 1 )//gallery display in modal
 
 
 
-
-/* let g = document.querySelector(".gallery_photos")
-console.log(g.childNodes)
-let p= g.childNodes
-q=Array.from(p)
-console.log(q)//node list 
-for (let i of q){console.log(i)}//tableau vide
-
-let y =g.children
-console.log(y)
-console.log(y[0])// undefined
-console.log(y.firstElementChild)// undefined
- */
