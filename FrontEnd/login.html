@@ -19,7 +19,7 @@
    
 	<section class="modal">
 		<h2>Ajout photo </h2>
-        <img src="./assets/icons/xmark.svg" alt="logo" class="close">
+        <img src="./assets/icons/xmark.svg" alt="logo" class="close" id="cross1">
         <img src="./assets/icons/arrow-left.svg" alt="logo" class="arrow_left">
         <div class="modal2_get_photo_canva">
             <img src="./assets/icons/picture-svgrepo-com 1.svg" alt="picture" class="imgOfCanvas">
@@ -28,9 +28,12 @@
         </div>
         <form action="#" method="post" class="modal2_form">
             <label for="title">Titre</label>
-            <input type="text" name="title" id="title">
+            <input type="text" name="title" id="title" required>
             <label for="Category">Catégorie</label>
-            <input type="number">           
+            <select name="Category" id="Category" required>
+                <option value=""></option>                
+            </select>
+          
         </form>
         <button class="modal_button button_active">Ajouter une photo</button>		
 		
