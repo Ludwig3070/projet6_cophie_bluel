@@ -14,6 +14,7 @@
 /* https://www.youtube.com/watch?v=3MUmRP9013I */
 /* https://www.youtube.com/watch?v=oh6Wtys98ig */
 /* https://grafikart.fr/tutoriels/javascript-templates-2076 */
+/* https://nouvelle-techno.fr/articles/utiliser-les-datasets-en-javascript-vanilla */
 
 /* get data from the server */
 
@@ -24,12 +25,7 @@
 async function fetchWorks() {
     /* for main code */
     const r = await fetch("http://localhost:5678/api/works");
-    return r.ok
-        ? await r.json()
-        : alert(
-            "Serveur injoignable"
-        ); /* si r.ok return r.json() else return alert */
-
+    return r.ok ? r.json() : alert("Serveur injoignable"); /* si r.ok return r.json() else return alert */
 }
 
 /**
@@ -62,6 +58,17 @@ async function autenthication_request(mail, password) {
             );
     }
 }
+
+async function fetchCategories() {
+    const r = await fetch("http://localhost:5678/api/categories");
+    return r.ok ? await r.json() : alert("Serveur injoignable"); /* si r.ok return r.json() else return alert */
+}
+
+
+
+
+
+/* all functions */
 
 /**
  * 
@@ -281,7 +288,7 @@ function modal2_on() {
     const arrow2 = document.getElementById("modal2_arrow_left")
     const cross2 = document.getElementById("cross2")
     const cover_page = document.querySelector(".cover_page")
-    console.log(modal2)
+    /* console.log(modal2) */
     cross2.addEventListener("click", () => {
         modal2.remove()
         modal_off()
@@ -295,7 +302,24 @@ function modal2_on() {
     /* end of arrow end cross */
 
     /* next code manages the content of "catégories*/
-    works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r))
+    /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r)) */
+    categories.then((reponse) => {
+        let category_tag = document.getElementById("category")
+        console.log(reponse)
+
+        for (let item of reponse) {
+            console.log(item)
+            let option = document.createElement("option")
+            option.innerText = `${item.name}`
+            option.setAttribute("data-id", item.id)//set data in the tag in order to be used by JS
+            option.setAttribute("data-name", item.name)//set data in the tag in order to be used by JS           
+            category_tag.appendChild(option)
+        }
+
+    })
+
+
+
     /*  */
     //
     //
@@ -355,7 +379,7 @@ function go_to_autenthication_editor() {
                 sessionStorage.setItem("token", response.token)//store token on session storage
                 console.log("userId : ", sessionStorage.getItem("userId"))
                 console.log("token : ", sessionStorage.getItem("token"))
-                works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r))//fonctionne,   pas besoin du storage               
+                /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r))//fonctionne,   pas besoin du storage    */
                 go_to_editor_mode()//display editor mode                                
             }
         );
@@ -364,7 +388,10 @@ function go_to_autenthication_editor() {
 
 /* main code */
 
-let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
+const works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
+const categories = fetchCategories()//promise which contains datas categories from the api
+//treatment of errors manages problems of network 
+categories.catch((error) => alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`))
 displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way
 displayGallery(); //displays all images
 go_to_autenthication_editor(); //manages login if necessary
