@@ -57,8 +57,8 @@
 			<h2>Galerie photo </h2>
 			<img src="./assets/icons/xmark.svg" alt="logo" class="close">
 			<div class="gallery_photos"></div>
-			<button class="modal_button button_active">Ajouter une photo</button>		
-			
+			<button class="modal_button  button_active">Ajouter une photo</button>
+
 		</section>
 		<section id="portfolio">
 			<h2>Mes Projets <span class="supervisor_access deleted"><img src="./assets/icons/Vector_black.svg"
@@ -84,25 +84,7 @@
 				<input type="submit" value="Envoyer">
 			</form>
 		</section>
-		<section class="modal no_visible">
-			<h2>Ajout photo </h2>
-			<img src="./assets/icons/xmark.svg" alt="logo" class="close" id="cross1">
-			<img src="./assets/icons/arrow-left.svg" alt="logo" class="arrow_left" id="modal1_arrow_left">
-			<div class="modal2_get_photo_canva">
-				<img src="./assets/icons/picture-svgrepo-com 1.svg" alt="picture" class="imgOfCanvas">
-				<button class="ajouterPhotos">+ Ajouter photo</button>
-				<p class="textOfCanvas">jpg,png : 4mo max</p>
-			</div>
-			<form action="#" method="post" class="modal2_form">
-				<label for="title">Titre</label>
-				<input type="text" name="title" id="title" required>
-				<label for="Category">Catégorie</label>
-				<select name="Category" id="Category" required>
-					<option value=""></option>                
-				</select>			  
-			</form>
-			<button class="modal_button button_active">Ajouter une photo</button>
-		</section>
+
 
 	</main>
 	<main hidden>
@@ -124,10 +106,12 @@
 		<section class="modal modal2">
 			<h2>Ajout photo </h2>
 			<img src="./assets/icons/xmark.svg" alt="logo" class="close" id="cross2">
-			<img src="./assets/icons/arrow-left.svg" alt="logo" class="arrow_left" id="modal2_arrow_left" >
+			<img src="./assets/icons/arrow-left.svg" alt="logo" class="arrow_left" id="modal2_arrow_left">
 			<div class="modal2_get_photo_canva">
 				<img src="./assets/icons/picture-svgrepo-com 1.svg" alt="picture" class="imgOfCanvas">
-				<button class="ajouterPhotos">+ Ajouter photo</button>
+				<label for="addPhotos" class="label_input_photos">+ Ajouter
+					photo</label><!-- using the label to style in css -->
+				<input type="file" id="addPhotos" accept="image/png,image/jpeg,image/jpg">
 				<p class="textOfCanvas">jpg,png : 4mo max</p>
 			</div>
 			<form action="#" method="post" class="modal2_form">
@@ -135,11 +119,11 @@
 				<input type="text" name="title" id="title" required>
 				<label for="category">Catégorie</label>
 				<select name="category" id="category" required>
-					<option value=""></option>                
-				</select>			  
+					<option value=""></option>
+				</select>
 			</form>
-			<button class="modal_button button_active">Ajouter une photo</button>		
-			
+			<button class="modal_button">Valider</button>
+
 		</section>
 	</template>
 

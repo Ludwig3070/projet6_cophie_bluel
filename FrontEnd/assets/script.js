@@ -15,7 +15,9 @@
 /* https://www.youtube.com/watch?v=oh6Wtys98ig */
 /* https://grafikart.fr/tutoriels/javascript-templates-2076 */
 /* https://nouvelle-techno.fr/articles/utiliser-les-datasets-en-javascript-vanilla */
-
+/* https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file */
+/* https://css-tricks.com/snippets/css/custom-file-input-styling-webkitblink/ */
+/* https://www.youtube.com/watch?v=jU8avTWJy9s */
 /* get data from the server */
 
 /**

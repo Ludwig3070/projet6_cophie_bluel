@@ -19,21 +19,37 @@
     width: 21px;
     height: 21px;
 }
-.ajouterPhotos{
-width: 173px;
-height: 36px;
-border-radius: 50px;
-background: #CBD6DC;
-color: #306685;
-text-align: center;
-font-family: "Work Sans";
-font-size: 14px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
-border: none;
-margin-bottom: 7px;
+input[type="file"] {/* delete the display */
+    display: none;
+
 }
+.label_input_photos{  /* get the style  */ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 173px;
+    height: 36px;
+    border-radius: 50px;
+    background: #CBD6DC;
+    color: #306685;
+    text-align: center;
+    font-family: "Work Sans";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;    
+    border: none;
+    margin-bottom: 7px;
+    cursor: pointer;
+  
+
+}
+
+
+
+
+
+
 .textOfCanvas{
 color: #444;
 text-align: center;
@@ -62,7 +78,7 @@ margin-bottom: 19px;
 
 }
 .modal2_form input,
-#Category {
+#category {
     height: 51px;
     background: #FFF;
     box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
@@ -72,6 +88,7 @@ margin-bottom: 19px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    
 }
 .modal2_form label{
     margin-top: 30px;

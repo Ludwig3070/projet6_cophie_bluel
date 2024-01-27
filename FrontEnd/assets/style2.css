@@ -51,6 +51,8 @@
     height: 36px;
     position: absolute;
     bottom:54px ;
+    background: #A7A7A7;
+    color: white;
 }
 .close{
     position: absolute;
@@ -59,10 +61,9 @@
     cursor: pointer;
     
 }
-.modal_button::before{
+.modal_button::before{/* line before button */
     content: "";
-    display: block;
-    
+    display: block;    
     height: 1px;
     width: 420px;
     background: #B3B3B3;
