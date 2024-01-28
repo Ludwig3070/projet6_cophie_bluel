@@ -46,13 +46,16 @@
     display: none;
 }
 
-.modal_button{
+.add_for_modal_button{
     width: 237px;
     height: 36px;
     position: absolute;
-    bottom:54px ;
-    background: #A7A7A7;
+    bottom:54px ;    
     color: white;
+}
+.passive_modal_button{
+    background: #A7A7A7;
+    border: none;
 }
 .close{
     position: absolute;
@@ -61,7 +64,7 @@
     cursor: pointer;
     
 }
-.modal_button::before{/* line before button */
+.add_for_modal_button::before{/* line before button */
     content: "";
     display: block;    
     height: 1px;
