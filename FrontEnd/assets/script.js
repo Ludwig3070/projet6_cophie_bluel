@@ -19,6 +19,11 @@
 /* https://css-tricks.com/snippets/css/custom-file-input-styling-webkitblink/ */
 /* https://www.youtube.com/watch?v=jU8avTWJy9s */
 /* get data from the server */
+/* https://www.youtube.com/watch?v=Vv9cVSt5nWE */
+/* https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test */
+/* https://developer.mozilla.org/fr/docs/Web/API/FileReader */
+/* https://devdoc.net/web/developer.mozilla.org/en-US/docs/Mozilla_event_reference.1.html */
+/* https://developer.mozilla.org/fr/docs/Web/API/HTML_Drag_and_Drop_API */
 
 /**
  * function that returns a promise with url data or an alert if the server is down
@@ -275,9 +280,11 @@ function modal_off() {
     cover_page.remove()//delete page over index.html
     modal.classList.add("no_visible") // display off modal 
 }
+
 function modal2_on() {
     /* https://www.youtube.com/watch?v=oh6Wtys98ig */
     /* https://grafikart.fr/tutoriels/javascript-templates-2076 */
+    /* https://developer.mozilla.org/fr/docs/Web/API/Node/cloneNode */
 
     /* this next code create a new modal (modal2 ) using template */
     const main = document.querySelector("main")
@@ -285,7 +292,8 @@ function modal2_on() {
     let modal2 = template.content.cloneNode(true) // make a clone of the template
     main.append(modal2)//create a new section with the clone on main
     /* end of modal 2 */
-    /* next code manages the arrow and the cross */
+
+    /* next code manages the arrow and the cross and the cover page click too, in order to remove modal2 by click*/
     modal2 = document.querySelector(".modal2")
     const arrow2 = document.getElementById("modal2_arrow_left")
     const cross2 = document.getElementById("cross2")
@@ -301,7 +309,7 @@ function modal2_on() {
     })
 
     arrow2.addEventListener("click", () => modal2.remove())
-    /* end of arrow end cross */
+    /* end of arrow and cross */
 
     /* next code manages the content of "catégories*/
     /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r)) */
@@ -320,14 +328,73 @@ function modal2_on() {
 
     })
 
+    /* next code manages the file to add on the canva */
+    const load_file = document.getElementById("addPhotos")
+    load_file.addEventListener("change",previewFile)//listen on load_file, execute previewFile
+    /* continue code here */
+
+    /* internal functions used only here */
+     /*
+ * internal function which manages the format and the size of the file to upload and display
+ */
+    function previewFile(){
+        const file_extension_regex = /\.(jpg|jpeg|png)$/i //decaration of the regex
+        const file =this.files[0]
+        if(!file_extension_regex.test(file.name)) {//if test regex is false on the name ...
+            alert("le fichier n'est pas au format demandé")
+            return
+        }
+        if(file.size > 4000000){//if image is too big ...
+            alert("le fichier est superieur à 4 MO")
+            return
+    }
+        const file_reader = new FileReader()
+        file_reader.readAsDataURL(file)
+        file_reader.addEventListener("load",(event)=>imageAndForm_manage(event,file))
+
+        /**
+         * display image chosen on the canva,set dat-id attribute an manages the others form fields
+         * @param {event} event 
+         * @param {*img} file 
+         */
+        function imageAndForm_manage (event,file){
+            let canva = document.querySelector(".modal2_get_photo_canva")
+            canva.innerHTML=""//erase content of canva
+            const img = document.createElement("img")
+            img.classList.add("preview_img")
+            img.src= event.target.result
+            img.setAttribute("data-id",true)
+            canva.appendChild(img)// display img on canva
+            console.log(img.dataset.id)
+            const title = document.getElementById("title")
+            const category = document.getElementById("category")
+            title.addEventListener("input",compare)
+            category.addEventListener("input",compare)
+            title.value=''//empty the field before entering the photo
+            category.value=''//empty the field before entering the photo
+            /**
+             * manage informations in form and the photo on the canva
+             * @returns nothing
+             */
+            function compare(){               
+                let button = document.querySelector(".modal2 button")
+                
+                if (!title.value||!category.value){
+                    button.classList.contains("button_active") ? button.classList.remove("button_active"):null
+                    button.classList.add("passive_modal_button")
+                    return
+                }
+                button.classList.remove("passive_modal_button")
+                button.classList.add("button_active")
+
+            }
+            
+        }
+
+       
 
 
-    /*  */
-    //
-    //
-    //
-    //
-    /*  */
+}
 }
 
 
