@@ -305,7 +305,7 @@ function modal2_on() {
     })
     cover_page.addEventListener("click", () => {
         modal2.remove()
-        modal_off()
+        
     })
 
     arrow2.addEventListener("click", () => modal2.remove())
@@ -331,12 +331,25 @@ function modal2_on() {
     /* next code manages the file to add on the canva */
     const load_file = document.getElementById("addPhotos")
     load_file.addEventListener("change",previewFile)//listen on load_file, execute previewFile
-    /* continue code here */
+
+    /* drag and drop option */
+
+    /* const drop_file = document.querySelector(".modal2_get_photo_canva")
+    drop_file.addEventListener("drop",dataTransfer(e)) */
+
+
 
     /* internal functions used only here */
-     /*
- * internal function which manages the format and the size of the file to upload and display
+
+  /*   function dataTransfer(e){ console.log(e)
+
+    }
  */
+
+
+    /*
+    * internal function which manages the format and the size of the file to upload and display
+    */
     function previewFile(){
         const file_extension_regex = /\.(jpg|jpeg|png)$/i //decaration of the regex
         const file =this.files[0]
