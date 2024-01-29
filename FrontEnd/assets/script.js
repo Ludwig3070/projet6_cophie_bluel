@@ -305,7 +305,7 @@ function modal2_on() {
     })
     cover_page.addEventListener("click", () => {
         modal2.remove()
-        
+
     })
 
     arrow2.addEventListener("click", () => modal2.remove())
@@ -328,86 +328,117 @@ function modal2_on() {
 
     })
 
-    /* next code manages the file to add on the canva */
+    /* next code manages the file to add on the canva when you click on button inside the canva*/
     const load_file = document.getElementById("addPhotos")
-    load_file.addEventListener("change",previewFile)//listen on load_file, execute previewFile
+    load_file.addEventListener("change", previewFile)//listen on load_file, execute previewFile
 
-    /* drag and drop option */
+    /* drag and drop option when you drag a file on the canva*/
 
-    /* const drop_file = document.querySelector(".modal2_get_photo_canva")
-    drop_file.addEventListener("drop",dataTransfer(e)) */
+    const drop_file = document.querySelector(".modal2_get_photo_canva")
+    
+
+    drop_file.addEventListener('dragover', e=>{//dragover and preventDefault allows to drop a file on drop-file
+        e.preventDefault()
+        drop_file.classList.add("dragover")//add a blur around drop-file when drag file is over
+    })
+    drop_file.addEventListener('dragleave', e=>{
+        e.preventDefault()
+        drop_file.classList.toggle("dragover")//remove blur when dreg file leave drop_file
+       
+    })
+    
+
+    drop_file.addEventListener('drop', processData)
 
 
-
-    /* internal functions used only here */
-
-  /*   function dataTransfer(e){ console.log(e)
-
-    }
- */
+    function processData(event) {
+        event.preventDefault()
+        drop_file.classList.toggle("dragover")//toggle blur when file is dropped
+        let file= event.dataTransfer.files[0] //file = transferered file 0 https://www.youtube.com/watch?v=9WHqGNgAtI8 from 53mn
+        // Process the data …
+        console.log ("transfert ok")
+        console.log ("event.dataTransfer = ",event.dataTransfer)
+        console.log("file=",file)
+        console.log("file[0]=",file[0])
+        /* previewFile(file) */
+        
+      }
+      
+      drop_file.addEventListener("dragend",(ev) => {            
+          // Call the drag and drop data processor
+          if (ev.dataTransfer !== null) processData(ev.dataTransfer);
+        },
+        
+      );
+    
+   
 
 
     /*
     * internal function which manages the format and the size of the file to upload and display
     */
-    function previewFile(){
+    function previewFile(arg) {
+
         const file_extension_regex = /\.(jpg|jpeg|png)$/i //decaration of the regex
-        const file =this.files[0]
-        if(!file_extension_regex.test(file.name)) {//if test regex is false on the name ...
+        let file=this.files[0]
+        
+        
+        if (!file_extension_regex.test(file.name)) {//if test regex is false on the name ...
             alert("le fichier n'est pas au format demandé")
             return
         }
-        if(file.size > 4000000){//if image is too big ...
+        if (file.size > 4000000) {//if image is too big ...
             alert("le fichier est superieur à 4 MO")
             return
-    }
+        }
         const file_reader = new FileReader()
         file_reader.readAsDataURL(file)
-        file_reader.addEventListener("load",(event)=>imageAndForm_manage(event,file))
+        file_reader.addEventListener("load", (event) => imageAndForm_manage(event, file))
 
-        /**
+      /* fonctions etaient ici */
+
+
+
+    }
+      /**
          * display image chosen on the canva,set dat-id attribute an manages the others form fields
          * @param {event} event 
          * @param {*img} file 
          */
-        function imageAndForm_manage (event,file){
-            let canva = document.querySelector(".modal2_get_photo_canva")
-            canva.innerHTML=""//erase content of canva
-            const img = document.createElement("img")
-            img.classList.add("preview_img")
-            img.src= event.target.result
-            img.setAttribute("data-id",true)
-            canva.appendChild(img)// display img on canva
-            console.log(img.dataset.id)
-            const title = document.getElementById("title")
-            const category = document.getElementById("category")
-            title.addEventListener("input",compare)
-            category.addEventListener("input",compare)
-            title.value=''//empty the field before entering the photo
-            category.value=''//empty the field before entering the photo
-            /**
-             * manage informations in form and the photo on the canva
-             * @returns nothing
-             */
-            function compare(){               
-                let button = document.querySelector(".modal2 button")
-                
-                if (!title.value||!category.value){
-                    button.classList.contains("button_active") ? button.classList.remove("button_active"):null
-                    button.classList.add("passive_modal_button")
-                    return
-                }
-                button.classList.remove("passive_modal_button")
-                button.classList.add("button_active")
+      function imageAndForm_manage(event, file) {
+        let canva = document.querySelector(".modal2_get_photo_canva")
+        canva.innerHTML = ""//erase content of canva
+        const img = document.createElement("img")
+        img.classList.add("preview_img")
+        img.src = event.target.result
+        img.setAttribute("data-id", true)
+        canva.appendChild(img)// display img on canva
+        console.log(img.dataset.id)
+        const title = document.getElementById("title")
+        const category = document.getElementById("category")
+        title.addEventListener("input", compare)
+        category.addEventListener("input", compare)
+        title.value = ''//empty the field before entering the photo
+        category.value = ''//empty the field before entering the photo
+        /**
+         * manage informations in form and the photo on the canva
+         * @returns nothing
+         */
+        function compare() {
+            let button = document.querySelector(".modal2 button")
 
+            if (!title.value || !category.value) {
+                button.classList.contains("button_active") ? button.classList.remove("button_active") : null
+                button.classList.add("passive_modal_button")
+                return
             }
-            
+            button.classList.remove("passive_modal_button")
+            button.classList.add("button_active")
+
         }
 
-       
+    }
 
-
-}
 }
 
 
