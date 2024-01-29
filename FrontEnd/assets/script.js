@@ -315,10 +315,10 @@ function modal2_on() {
     /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r)) */
     categories.then((reponse) => {
         let category_tag = document.getElementById("category")
-        console.log(reponse)
+        /* console.log(reponse) */
 
         for (let item of reponse) {
-            console.log(item)
+            /* console.log(item) */
             let option = document.createElement("option")
             option.innerText = `${item.name}`
             option.setAttribute("data-id", item.id)//set data in the tag in order to be used by JS
@@ -334,7 +334,8 @@ function modal2_on() {
         previewFile(this.files[0])
     })//listen on load_file, execute previewFile
 
-    /* drag and drop option when you drag a file on the canva*/
+
+    /* drag and drop option when you drag a file on the canva */
 
     const drop_file = document.querySelector(".modal2_get_photo_canva")
 
@@ -367,16 +368,11 @@ function modal2_on() {
 
     }
 
-  
-
-
-
 
     /*
     * internal function which manages the format and the size of the file to upload and display
     */
     function previewFile(arg = 0) {
-
         const file_extension_regex = /\.(jpg|jpeg|png)$/i //decaration of the regex
         let file = arg
         if (!file_extension_regex.test(file.name)) {//if test regex is false on the name ...
@@ -406,7 +402,7 @@ function modal2_on() {
             img.src = event.target.result
             img.setAttribute("data-id", true)
             canva.appendChild(img)// display img on canva
-            console.log(img.dataset.id)
+            /* console.log(img.dataset.id) */
             const title = document.getElementById("title")
             const category = document.getElementById("category")
             title.addEventListener("input", compare)
@@ -429,12 +425,9 @@ function modal2_on() {
                 button.classList.add("button_active")
 
             }
-
         }
 
-
     }
-
 
 }
 
