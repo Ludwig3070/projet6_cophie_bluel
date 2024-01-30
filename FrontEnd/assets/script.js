@@ -78,19 +78,33 @@ async function fetchCategories() {
 async function sendDatasToServer(formData) {
     /* to use hidden main code */
     const token = sessionStorage.getItem("token")
+    /* let image =sessionStorage.getItem("file_reader") */
+    const category = Number(formData.get('category'))
+    const title = formData.get('title')
+    /* const image = formData.get('image') */
+    console.log(category,typeof category)
+    console.log(title, typeof title)
+    /* console.log(image,typeof image) */
+    /* sessionStorage.setItem("image",image) */
+    const image =sessionStorage.getItem("image3")
+    console.log("TTTTTTTTTTTTTT",image)
+    
+
+   console.log("JJJJJJJJJJJJ",formData) 
+
+
     const r = await fetch("http://localhost:5678/api/works", {
 
         method: "POST",
         headers: {
+             
             "Authorization" : `Bearer ${token}`,
-            "Content-Type"  : "multipart/form-data; boundary=something" , /* ajout */
-            "accept" : "application/json",
+           /*  "Content-Type"  : "multipart/form-data; boundary=something" ,  
+            "accept" : "application/json",  */
         },
-        body: {
-            formData,
-        },
+        body: formData,
        
-    });
+    }); 
 
     return  r.ok ? alert("Le travail a été ajouté"): alert(`ERREUR : ${r.status}`)
     
@@ -381,7 +395,7 @@ function modal2_on() {
     function processData(event) {
         event.preventDefault()
         drop_file.classList.toggle("dragover")//toggle blur when file is dropped
-        let file = event.dataTransfer.files[0] //file = transferered file 0 https://www.youtube.com/watch?v=9WHqGNgAtI8 from 53mn
+        let file = event.target.files[0] //file = transferered file 0 https://www.youtube.com/watch?v=9WHqGNgAtI8 from 53mn
         formData.append("image",file)//add file to formdata in order to be sent to the serveur
         // Process the data …
         /*   console.log ("transfert ok")
@@ -415,18 +429,23 @@ function modal2_on() {
         file_reader.addEventListener("load", (event) => imageAndForm_manage(event, file))
         console.log (file)
         console.log (file.name)
-
+        console.log (file_reader)
+       
         /**
         * display image chosen on the canva,set dat-id attribute , manages the others form fields
         * @param {event} event 
         * @param {img} file 
         */
         function imageAndForm_manage(event, file) {
+            console.log (file_reader.result)
+            sessionStorage.setItem("file_reader", file_reader.result.toString())//store file_reader on session storage    
             let canva = document.querySelector(".modal2_get_photo_canva")
             canva.innerHTML = ""//erase content of canva
             const img = document.createElement("img")
             img.classList.add("preview_img")
             img.src = event.target.result
+            console.log("RRRR",img.src)
+            sessionStorage.setItem("image3",event.target.result)
             img.setAttribute("data-id", true)
             canva.appendChild(img)// display img on canva
             /* console.log(img.dataset.id) */
@@ -460,13 +479,13 @@ function modal2_on() {
                 optionArray.forEach((item)=>{
                     console.log(item.index)
                     console.log(item.value)
-                    item.value===category.value ? formData.append("categoryId",item.index) : null
+                    item.value===category.value ? formData.append("category",item.index) : null
                 })
                                 
                
                 
                 console.log("formdata=",formData)
-                console.log("formdata=",formData.entries.value)
+                
                 
                 let send
                 confirm("Etes vous sûre de vouloir envoyer ?") ? send = sendDatasToServer(formData) : modal2.remove()
