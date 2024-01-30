@@ -18,13 +18,17 @@
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file */
 /* https://css-tricks.com/snippets/css/custom-file-input-styling-webkitblink/ */
 /* https://www.youtube.com/watch?v=jU8avTWJy9s */
-/* get data from the server */
+
 /* https://www.youtube.com/watch?v=Vv9cVSt5nWE */
 /* https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test */
 /* https://developer.mozilla.org/fr/docs/Web/API/FileReader */
 /* https://devdoc.net/web/developer.mozilla.org/en-US/docs/Mozilla_event_reference.1.html */
 /* https://developer.mozilla.org/fr/docs/Web/API/HTML_Drag_and_Drop_API */
 
+
+
+
+/* get data from the server */
 /**
  * function that returns a promise with url data or an alert if the server is down
  * @returns promise
@@ -38,11 +42,11 @@ async function fetchWorks() {
 /**
  * put autenthicaton data to get a tocken end a user id
  * @param {string} mail
- * @param {stringtring} password
+ * @param {string} password
  * @returns {promise} 
  */
 async function autenthication_request(mail, password) {
-    /* for hidden code */
+    /* to used hidden main code */
 
     const r = await fetch("http://localhost:5678/api/users/login", {
         method: "POST",
@@ -68,8 +72,30 @@ async function autenthication_request(mail, password) {
 
 async function fetchCategories() {
     const r = await fetch("http://localhost:5678/api/categories");
-    return r.ok ? await r.json() : alert("Serveur injoignable"); /* si r.ok return r.json() else return alert */
+    return r.ok ? await r.json() : alert("Serveur injoignable"); /* if r.ok return r.json() else return alert */
 }
+
+async function sendDatasToServer(formData) {
+    /* to use hidden main code */
+    const token = sessionStorage.getItem("token")
+    const r = await fetch("http://localhost:5678/api/works", {
+
+        method: "POST",
+        headers: {
+            "Authorization" : `Bearer ${token}`,
+            "Content-Type"  : "multipart/form-data; boundary=something" , /* ajout */
+            "accept" : "application/json",
+        },
+        body: {
+            formData,
+        },
+       
+    });
+
+    return  r.ok ? alert("Le travail a été ajouté"): alert(`ERREUR : ${r.status}`)
+    
+}
+
 
 
 
@@ -285,7 +311,7 @@ function modal2_on() {
     /* https://www.youtube.com/watch?v=oh6Wtys98ig */
     /* https://grafikart.fr/tutoriels/javascript-templates-2076 */
     /* https://developer.mozilla.org/fr/docs/Web/API/Node/cloneNode */
-
+    formData = new FormData()
     /* this next code create a new modal (modal2 ) using template */
     const main = document.querySelector("main")
     const template = document.getElementById("modal2")// get template from the DOM
@@ -303,15 +329,12 @@ function modal2_on() {
         modal2.remove()
         modal_off()
     })
-    cover_page.addEventListener("click", () => {
-        modal2.remove()
-
-    })
+    cover_page.addEventListener("click", () => modal2.remove())
 
     arrow2.addEventListener("click", () => modal2.remove())
     /* end of arrow and cross */
 
-    /* next code manages the content of "catégories*/
+    /* next code manages the content of "catégories input form*/
     /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r)) */
     categories.then((reponse) => {
         let category_tag = document.getElementById("category")
@@ -331,6 +354,7 @@ function modal2_on() {
     /* next code manages the file to add on the canva when you click on button inside the canva*/
     const load_file = document.getElementById("addPhotos")
     load_file.addEventListener("change", function (event) {
+        formData.append("image",this.files[0])//add to formdata in order to be sent to the serveur
         previewFile(this.files[0])
     })//listen on load_file, execute previewFile
 
@@ -358,11 +382,13 @@ function modal2_on() {
         event.preventDefault()
         drop_file.classList.toggle("dragover")//toggle blur when file is dropped
         let file = event.dataTransfer.files[0] //file = transferered file 0 https://www.youtube.com/watch?v=9WHqGNgAtI8 from 53mn
+        formData.append("image",file)//add file to formdata in order to be sent to the serveur
         // Process the data …
-        /*  console.log ("transfert ok")
+        /*   console.log ("transfert ok")
          console.log ("event.dataTransfer = ",event.dataTransfer)
+         console.log ("event.dataTransfer.getData('path') = ",event.dataTransfer.getData('name') )
          console.log("file=",file)
-         console.log("filename=",file.name) */
+         console.log("filename=",file.name)  */
 
         previewFile(file)
 
@@ -387,10 +413,11 @@ function modal2_on() {
         const file_reader = new FileReader()
         file_reader.readAsDataURL(file)
         file_reader.addEventListener("load", (event) => imageAndForm_manage(event, file))
-
+        console.log (file)
+        console.log (file.name)
 
         /**
-        * display image chosen on the canva,set dat-id attribute an manages the others form fields
+        * display image chosen on the canva,set dat-id attribute , manages the others form fields
         * @param {event} event 
         * @param {img} file 
         */
@@ -423,7 +450,32 @@ function modal2_on() {
                 }
                 button.classList.remove("passive_modal_button")
                 button.classList.add("button_active")
-
+                const valider =document.querySelector(".modal2 .modal_button")
+                valider.classList.contains("button_active") ? valider.addEventListener('click',sendToServer) : null              
+            }
+            function sendToServer(){
+                formData.append("title",title.value)
+                const option = category.querySelectorAll("#category option")
+                const optionArray = Array.from(option)
+                optionArray.forEach((item)=>{
+                    console.log(item.index)
+                    console.log(item.value)
+                    item.value===category.value ? formData.append("categoryId",item.index) : null
+                })
+                                
+               
+                
+                console.log("formdata=",formData)
+                console.log("formdata=",formData.entries.value)
+                
+                let send
+                confirm("Etes vous sûre de vouloir envoyer ?") ? send = sendDatasToServer(formData) : modal2.remove()
+                send.then(res=>{
+                    displayGallery()
+                    modal2.remove()
+                }
+                   
+                )
             }
         }
 
@@ -493,6 +545,7 @@ function go_to_autenthication_editor() {
 
 const works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 const categories = fetchCategories()//promise which contains datas categories from the api
+/* works_fetch.then(response=>console.log(response)) */
 //treatment of errors manages problems of network 
 categories.catch((error) => alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`))
 displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way
