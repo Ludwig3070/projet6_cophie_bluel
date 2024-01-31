@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Sophie Bluel - Architecte d'intérieur</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
+		rel="stylesheet">
+	<meta name="description" content="">
+	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./assets/style2.css">
+	<link rel="stylesheet" href="./assets/style3.css">
+	<script src="./assets/script.js" defer></script><!-- lien vers script.js en defer -->
+	<!-- ressources -->
+	<!-- https://grafikart.fr/tutoriels/javascript-promise-2068 -->
+</head>
+
+<body>
+	<header>
+		<section class="edition_mode none">
+			<img src="./assets/icons/Vector_white.svg" alt="">
+			<p>Mode édition</p>
+		</section>
+		<section id="header">
+			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+			<nav>
+				<ul>
+					<li>projets</li>
+					<li>contact</li>
+					<li><a id="nav_login" href="#">login</a></li>
+					<li><img src="./assets/icons/icons8-instagram 1.svg" alt="Instagram"></li>
+				</ul>
+			</nav>
+		</section>
+
+	</header>
+	<main>
+		<section id="introduction">
+			<figure>
+				<img src="./assets/images/sophie-bluel.png" alt="">
+			</figure>
+			<article>
+				<h2>Designer d'espace</h2>
+				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison
+					finale du chantier.</p>
+				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les
+					couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du
+					chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
+				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
+					décorateur(trice)</p>
+			</article>
+		</section>
+		<section class="modal no_visible ">
+			<h2>Galerie photo </h2>
+			<img src="./assets/icons/xmark.svg" alt="logo" class="close">
+			<div class="gallery_photos"></div>
+			<button class="modal_button add_for_modal_button button_active">Ajouter une photo</button>
+
+		</section>
+		<section id="portfolio">
+			<h2>Mes Projets <span class="supervisor_access deleted"><img src="./assets/icons/Vector_black.svg"
+						alt="icon"> modifier</span></h2>
+			<div class="search_categories">
+				<button class="button button_active" data-id="0">
+					<span>Tous</span>
+				</button>
+			</div>
+			<div class="gallery">
+				<!-- code deleted ,JS manages -->
+		</section>
+		<section id="contact">
+			<h2>Contact</h2>
+			<p>Vous avez un projet ? Discutons-en !</p>
+			<form action="#" method="post">
+				<label for="name">Nom</label>
+				<input type="text" name="name" id="name">
+				<label for="email">Email</label>
+				<input type="email" name="email" id="email">
+				<label for="message">Message</label>
+				<textarea name="message" id="message" cols="30" rows="10"></textarea>
+				<input type="submit" value="Envoyer">
+			</form>
+		</section>
+
+
+	</main>
+	<main hidden>
+		<section id="login">
+			<h2>Login</h2>
+			<form name="editor_form">
+				<label for="login">E-mail</label>
+				<input type="email" name="editor_email" required>
+				<label for="editor_password">Mot de passe</label>
+				<input type="password" name="editor_password" id="editor_password" required value="S0phie">
+				<input type="submit" value="Se connecter">
+				<a href="#">Mot de passe oublié</a>
+			</form>
+		</section>
+
+	</main>
+
+	<template id="modal2">
+		<section class="modal modal2">
+			<h2>Ajout photo </h2>
+			<img src="./assets/icons/xmark.svg" alt="logo" class="close" id="cross2">
+			<img src="./assets/icons/arrow-left.svg" alt="logo" class="arrow_left" id="modal2_arrow_left">
+			<div class="modal2_get_photo_canva" >
+				<img src="./assets/icons/picture-svgrepo-com 1.svg" alt="picture" class="imgOfCanvas">
+				<label for="addPhotos" class="label_input_photos">+ Ajouter
+					photo</label><!-- using the label to style in css -->
+				<input type="file" id="addPhotos" accept="image/png, image/jpeg, image/jpg">
+				<p class="textOfCanvas">jpg,png : 4mo max</p>
+			</div>
+			<form action="#" method="post" class="modal2_form">
+				<label for="title">Titre</label>
+				<input type="text" name="title" id="title" required>
+				<label for="category">Catégorie</label>
+				<select name="category" id="category" required>
+					<option value=""></option>
+				</select>
+			</form>
+			<button class="modal_button add_for_modal_button passive_modal_button">Valider</button>
+
+		</section>
+	</template>
+
+	<footer>
+		<nav>
+			<ul>
+				<li>Mentions Légales</li>
+			</ul>
+		</nav>
+	</footer>
+</body>
+
+</html>

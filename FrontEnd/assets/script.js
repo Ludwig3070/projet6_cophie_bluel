@@ -78,36 +78,24 @@ async function fetchCategories() {
 async function sendDatasToServer(formData) {
     /* to use hidden main code */
     const token = sessionStorage.getItem("token")
-    /* let image =sessionStorage.getItem("file_reader") */
-    const category = Number(formData.get('category'))
-    const title = formData.get('title')
-    /* const image = formData.get('image') */
-    console.log(category,typeof category)
-    console.log(title, typeof title)
-    /* console.log(image,typeof image) */
-    /* sessionStorage.setItem("image",image) */
-    const image =sessionStorage.getItem("image3")
-    console.log("TTTTTTTTTTTTTT",image)
-    
 
-   console.log("JJJJJJJJJJJJ",formData) 
+    /*  const category = Number(formData.get('category'))
+     const title = formData.get('title')
+ 
+     console.log(category, typeof category)
+     console.log(title, typeof title) */
+
 
 
     const r = await fetch("http://localhost:5678/api/works", {
 
         method: "POST",
-        headers: {
-             
-            "Authorization" : `Bearer ${token}`,
-           /*  "Content-Type"  : "multipart/form-data; boundary=something" ,  
-            "accept" : "application/json",  */
-        },
+        headers: { "Authorization": `Bearer ${token}`, },
         body: formData,
-       
-    }); 
+    });
 
-    return  r.ok ? alert("Le travail a été ajouté"): alert(`ERREUR : ${r.status}`)
-    
+    return r.ok ? alert("Le travail a été ajouté") : alert(`ERREUR : ${r.status}`)
+
 }
 
 
@@ -368,7 +356,7 @@ function modal2_on() {
     /* next code manages the file to add on the canva when you click on button inside the canva*/
     const load_file = document.getElementById("addPhotos")
     load_file.addEventListener("change", function (event) {
-        formData.append("image",this.files[0])//add to formdata in order to be sent to the serveur
+        formData.append("image", this.files[0])//add to formdata in order to be sent to the serveur
         previewFile(this.files[0])
     })//listen on load_file, execute previewFile
 
@@ -395,8 +383,8 @@ function modal2_on() {
     function processData(event) {
         event.preventDefault()
         drop_file.classList.toggle("dragover")//toggle blur when file is dropped
-        let file = event.target.files[0] //file = transferered file 0 https://www.youtube.com/watch?v=9WHqGNgAtI8 from 53mn
-        formData.append("image",file)//add file to formdata in order to be sent to the serveur
+        let file = event.dataTransfer.files[0] //file = transferered file 0 https://www.youtube.com/watch?v=9WHqGNgAtI8 from 53mn
+        formData.append("image", file)//add file to formdata in order to be sent to the serveur
         // Process the data …
         /*   console.log ("transfert ok")
          console.log ("event.dataTransfer = ",event.dataTransfer)
@@ -427,25 +415,24 @@ function modal2_on() {
         const file_reader = new FileReader()
         file_reader.readAsDataURL(file)
         file_reader.addEventListener("load", (event) => imageAndForm_manage(event, file))
-        console.log (file)
-        console.log (file.name)
-        console.log (file_reader)
-       
+        /* console.log (file) */
+
+
         /**
         * display image chosen on the canva,set dat-id attribute , manages the others form fields
         * @param {event} event 
         * @param {img} file 
         */
         function imageAndForm_manage(event, file) {
-            console.log (file_reader.result)
+            /* console.log (file_reader.result) */
             sessionStorage.setItem("file_reader", file_reader.result.toString())//store file_reader on session storage    
             let canva = document.querySelector(".modal2_get_photo_canva")
             canva.innerHTML = ""//erase content of canva
             const img = document.createElement("img")
             img.classList.add("preview_img")
             img.src = event.target.result
-            console.log("RRRR",img.src)
-            sessionStorage.setItem("image3",event.target.result)
+            /* console.log("RRRR",img.src) */
+            /* sessionStorage.setItem("image3",event.target.result) */
             img.setAttribute("data-id", true)
             canva.appendChild(img)// display img on canva
             /* console.log(img.dataset.id) */
@@ -469,32 +456,43 @@ function modal2_on() {
                 }
                 button.classList.remove("passive_modal_button")
                 button.classList.add("button_active")
-                const valider =document.querySelector(".modal2 .modal_button")
-                valider.classList.contains("button_active") ? valider.addEventListener('click',sendToServer) : null              
+                const valider = document.querySelector(".modal2 .modal_button")
+                valider.classList.contains("button_active") ? valider.addEventListener('click', sendToServer) : null
             }
-            function sendToServer(){
-                formData.append("title",title.value)
+            function sendToServer() {
+                formData.append("title", title.value)
                 const option = category.querySelectorAll("#category option")
                 const optionArray = Array.from(option)
-                optionArray.forEach((item)=>{
-                    console.log(item.index)
-                    console.log(item.value)
-                    item.value===category.value ? formData.append("category",item.index) : null
+                optionArray.forEach((item) => {
+                    /* console.log(item.index)
+                    console.log(item.value) */
+                    item.value === category.value ? formData.append("category", item.index) : null
                 })
-                                
-               
-                
-                console.log("formdata=",formData)
-                
-                
-                let send
-                confirm("Etes vous sûre de vouloir envoyer ?") ? send = sendDatasToServer(formData) : modal2.remove()
-                send.then(res=>{
-                    displayGallery()
-                    modal2.remove()
+                /* console.log("formdata=",formData) */
+                /*  let send
+                 confirm("Etes vous sûre de vouloir envoyer ?") ? send = sendDatasToServer(formData) : modal2.remove()
+                 send.then(res => {
+                     displayGallery()
+                     modal2.remove()
+                 }) */
+                if (confirm("Etes vous sûre de vouloir envoyer ?")) {
+                    const send = sendDatasToServer(formData)
+                    send.then(res => {
+                        console.log("ok")
+                        fetchWorks().then(() => {
+                            works_fetch = fetchWorks()//mandatory to upload the new work
+                            /* console.log(works_fetch) */
+                            displayGallery()//display gallery with the new work
+                            displayGallery(0, tag, 1)//gallery display in modal
+                            /* console.log ("display ok") */
+                        }).then(() => {
+                            /*  console.log ("modal2.remove ok") */
+                            modal2.remove()
+                        })
+
+                    })
                 }
-                   
-                )
+                else { modal2.remove() }
             }
         }
 
@@ -549,10 +547,9 @@ function go_to_autenthication_editor() {
         server_autenthication_request.then(/* response is an object with userid and token */
             response => {/* in this part of code acces is confirmed so it can manage a new stage */
 
-                sessionStorage.setItem("userId", response.userId)//store userId on session storage
+                /* sessionStorage.setItem("userId", response.userId)//store userId on session storage */
                 sessionStorage.setItem("token", response.token)//store token on session storage
-                console.log("userId : ", sessionStorage.getItem("userId"))
-                console.log("token : ", sessionStorage.getItem("token"))
+
                 /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r))//fonctionne,   pas besoin du storage    */
                 go_to_editor_mode()//display editor mode                                
             }
@@ -562,7 +559,7 @@ function go_to_autenthication_editor() {
 
 /* main code */
 
-const works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
+let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 const categories = fetchCategories()//promise which contains datas categories from the api
 /* works_fetch.then(response=>console.log(response)) */
 //treatment of errors manages problems of network 
@@ -570,7 +567,7 @@ categories.catch((error) => alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLE
 displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way
 displayGallery(); //displays all images
 go_to_autenthication_editor(); //manages login if necessary
-/* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtained from the session store */
+/* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtaessentialined from the session store */
 /* works_fetch.then(r=>console.log("in main code works_fetch.then()",r))//fonctionne ici */
 let tag = ".gallery_photos"
 displayGallery(0, tag, 1)//gallery display in modal

@@ -26,20 +26,22 @@
 }
 
 .gallery_photos{
-    width: 420px;    
+    width: 425px;
+    height: 390px;
+    overflow-y: scroll;      
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-column-gap: 6px;
 	grid-row-gap: 22px;   
 }
 .gallery_photos figure {
-    width:78px ;
+    width:77px ;
     height: 104px;
     position: relative;/* kk */    
 }
 .gallery_photos figure > img {
     object-fit: cover;
-    width:77px ;
+    width:76px ;
     height: 104px;
 }
 .gallery_photos figure figcaption{

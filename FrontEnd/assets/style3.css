@@ -98,8 +98,6 @@ margin-bottom: 19px;
     height: 100%;
 }
 
-.dragover{
-    -webkit-box-shadow: 0px 0px 41px 29px rgba(48,102,133,0.6);
-    -moz-box-shadow: 0px 0px 41px 29px rgba(48,102,133,0.6);
+.dragover{      
     box-shadow: 0px 0px 41px 29px rgba(48,102,133,0.6);
 }
