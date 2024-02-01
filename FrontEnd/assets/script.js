@@ -45,7 +45,7 @@ async function fetchWorks() {
  * @param {string} password
  * @returns {promise} 
  */
-async function autenthication_request(mail, password) {
+async function autenthicationRequest(mail, password) {
     /* to used hidden main code */
 
     const r = await fetch("http://localhost:5678/api/users/login", {
@@ -75,7 +75,7 @@ async function fetchCategories() {
     return r.ok ? await r.json() : alert("Serveur injoignable"); /* if r.ok return r.json() else return alert */
 }
 
-async function sendDatasToServer(formData) {
+async function sendWorkToServer(formData) {
     /* to use hidden main code */
     const token = sessionStorage.getItem("token")
 
@@ -94,7 +94,7 @@ async function sendDatasToServer(formData) {
         body: formData,
     });
 
-    return r.ok ? alert("Le travail a été ajouté") : alert(`ERREUR : ${r.status}`)
+    return r.ok ? null : alert(`ERREUR : ${r.status}`)
 
 }
 /**
@@ -127,7 +127,7 @@ async function deleteWork(id) {
 
 /**
  * 
-displays images in the gallery according to the category of the "arg" parameter (0=all) (for main code)
+displays images in the gallery according to the category of the "arg" parameter (0=all) (1..3 for others categories)
  * @param {number} arg categorie to be display on gallery
  */
 function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
@@ -139,48 +139,46 @@ function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
             gallery.innerHTML = ""; //erase the gallery before traitment,usefull in others parts of code
 
             worksArray.map((item) => {//iteration for each item
-
-                /**
-                 * displays images in the gallery for each item
-                 */
-                function display(arg3) {
-
-                    //internal function available only here which is used to optimise code
-                    let figure = document.createElement("figure");
-                    gallery.appendChild(figure); /* these instructions create the tags figure */
-                    let img = document.createElement("img"); //create tag img
-                    img.src = item.imageUrl; //path of img
-                    img.alt = item.title; //alternative text of img
-                    figure.appendChild(img); /* these instructions add images in figure */
-                    let figcaption = document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
-                    figcaption.innerText = item.title;
-                    figure.appendChild(figcaption);
-                    if (arg3 === 1) {
-                        let logo = document.createElement("img")
-                        logo.src = "./assets/icons/trash-can-solid.svg"
-                        logo.classList.add("trash_img")
-                        let div = document.createElement("div")
-                        div.classList.add("trash")
-                        div.setAttribute("data-id", item.id)
-                        figure.appendChild(div)
-                        div.appendChild(logo)
-                    }
-                }/* end of function display */
-
                 if (!arg) { display(arg3); } //select and display the correpondant content of argument
                 else {
                     item.categoryId === arg ? display() : null;
                 }
+               /**
+                 * displays images in the gallery for each item
+                 */
+               function display(arg3) {
+
+                //internal function available only here which is used to optimise code
+                let figure = document.createElement("figure");
+                gallery.appendChild(figure); /* these instructions create the tags figure */
+                let img = document.createElement("img"); //create tag img
+                img.src = item.imageUrl; //path of img
+                img.alt = item.title; //alternative text of img
+                figure.appendChild(img); /* these instructions add images in figure */
+                let figcaption = document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
+                figcaption.innerText = item.title;
+                figure.appendChild(figcaption);
+                if (arg3 === 1) {
+                    let logo = document.createElement("img")
+                    logo.src = "./assets/icons/trash-can-solid.svg"
+                    logo.classList.add("trash_img")
+                    let div = document.createElement("div")
+                    div.classList.add("trash")
+                    div.setAttribute("data-id", item.id)
+                    figure.appendChild(div)
+                    div.appendChild(logo)
+                }
+            }/* end of function display */
             }); 
-            (arg3 === 1) ? deleteWorks(): null
+            (arg3 === 1) ? deleteWorks(): null//to put trashes active on click
 
         }
     );
 }
 /**
- * create the search_categrories DOM on index.htm (for main code) (very big function)
+ * create the search_categrories DOM on index.html and manages buttons (very big function)
  */
-function displayGallerySearch() {
+function displayCategoryButtonsBar() {
 
     //treatment of errors
     works_fetch.catch((error) => {
@@ -243,17 +241,12 @@ function displayGallerySearch() {
 }
 
 /**
- * swap main    main(hidden) <--->main vice versa + include fontweight toggle of login/logout on the header
+ * swap main    main(hidden) <--->main vice versa + include fontweight toggle of login/logout on the header,toggle font weight 400<--->600 and vice versa on navlogin/logout
  */
-function main_hiddenmain_toggle() {
+function toggleMain() {
     const mains = document.querySelectorAll("main"); //it is a nodelist with 2 tags main
     mains.forEach((main) => main.toggleAttribute("hidden")); //toggles the attribte hidden
-    nav_login_weight_toggle()
-}
-/**
- * toggle font weight 400<--->600 and vice versa on navlogin/logout
- */
-function nav_login_weight_toggle() {
+    
     const nav_login = document.getElementById("nav_login");
     nav_login.classList.contains("li_logout") ? nav_login.classList.remove("li_logout") : nav_login.classList.add("li_logout")
 }
@@ -261,7 +254,7 @@ function nav_login_weight_toggle() {
 /**
  * toggle display of edition mode in the header (opacity 0 <---> 1)
  */
-function header_edition_mode_bar_toggle() {
+function toggleModeEditionBar() {
     const edition_mode = document.querySelector(".edition_mode");
     const header = document.getElementById("header");
     edition_mode.classList.contains("none") ? edition_mode.classList.remove("none") : edition_mode.classList.add("none")
@@ -271,42 +264,42 @@ function header_edition_mode_bar_toggle() {
 /**
  * toggle logout/login text on the header and vice versa
  */
-function nav_log_out_in_toggle() {
+function toggleNavLogin() {
     let nav_login = document.getElementById("nav_login");
     nav_login.innerText === "logout" ? nav_login.innerHTML = "login" : nav_login.innerHTML = "logout"
 }
 /**
  * toggle class deleted on logo supervisor_access used in editor mode
  */
-function supervisor_access_toggle() {
+function toggleSupervisorAccess() {
     const supervisor_access_image = document.querySelector(".supervisor_access")
     supervisor_access_image.classList.toggle("deleted")
 }
 /**
  * used with event on click on the editor mode only, don't use it somewhere else 
  */
-function return_to_basic_mode() {
+function returnToBasicMode() {
     const nav_login = document.getElementById("nav_login");//necessary for the two last line of code
 
-    header_edition_mode_bar_toggle()//display off the edition mode bar on the header
-    nav_log_out_in_toggle() //display login on the header (logout--->login)
-    gallery_search_categories_toggle_deleted()//move the gallery_search_categories on
-    supervisor_access_toggle()//manage button "modifier" (delete it)
+    toggleModeEditionBar()//display off the edition mode bar on the header
+    toggleNavLogin() //display login on the header (logout--->login)
+    ToggleButtonBarClassDisplay()//move the gallery_search_categories on
+    toggleSupervisorAccess()//manage button "modifier" (delete it)
 
-    nav_login.removeEventListener("click", return_to_basic_mode)//remove effect on button login/logout 
-    nav_login.addEventListener("click", main_hiddenmain_toggle);//get ready click to toggle main
+    nav_login.removeEventListener("click", returnToBasicMode)//remove effect on button login/logout 
+    nav_login.addEventListener("click", toggleMain);//get ready click to toggle main
 }
 /**
  * toggle display on search_categories
  */
-function gallery_search_categories_toggle_deleted() {
+function ToggleButtonBarClassDisplay() {
     const search_categories = document.querySelector(".search_categories")
     search_categories.classList.toggle("deleted")
 }
 /**
  * move display modal on
  */
-function modal_on() {
+function showModalGaleryPhoto() {
     const body = document.querySelector("body") //get the first main tag
     const cover_page = document.createElement("div")
     const modal = document.querySelector(".modal")
@@ -316,15 +309,15 @@ function modal_on() {
     const modal_close1 = document.querySelector(".close")
     const modal_close2 = document.querySelector(".cover_page")
     const button_add_picture = document.querySelector('.modal_button')
-    modal_close1.addEventListener("click", modal_off) //make the click active on button 'close'   
-    modal_close2.addEventListener("click", modal_off)//make the click active 
-    button_add_picture.addEventListener("click", modal2_on)
-    deleteWorks()//manages trash buttons in modal,can be used in modal_on because trashes exist
+    modal_close1.addEventListener("click", hideModalGaleryPhoto) //make the click active on button 'close'   
+    modal_close2.addEventListener("click", hideModalGaleryPhoto)//make the click active 
+    button_add_picture.addEventListener("click", showModalAddPhoto)
+    deleteWorks()//manages trash buttons in modal,can be used in showModalGaleryPhoto because trashes exist
 }
 /**
  * move display modal off
  */
-function modal_off() {
+function hideModalGaleryPhoto() {
     const body = document.querySelector("body") //get the first main tag
     const cover_page = document.querySelector(".cover_page")
     const modal = document.querySelector(".modal")
@@ -332,7 +325,7 @@ function modal_off() {
     modal.classList.add("no_visible") // display off modal 
 }
 
-function modal2_on() {
+function showModalAddPhoto() {
     /* https://www.youtube.com/watch?v=oh6Wtys98ig */
     /* https://grafikart.fr/tutoriels/javascript-templates-2076 */
     /* https://developer.mozilla.org/fr/docs/Web/API/Node/cloneNode */
@@ -352,7 +345,7 @@ function modal2_on() {
     /* console.log(modal2) */
     cross2.addEventListener("click", () => {
         modal2.remove()
-        modal_off()
+        hideModalGaleryPhoto()
     })
     cover_page.addEventListener("click", () => modal2.remove())
 
@@ -495,7 +488,7 @@ function modal2_on() {
                 })
 
                 if (confirm("Etes vous sûre de vouloir envoyer ?")) {
-                    const send = sendDatasToServer(formData)
+                    const send = sendWorkToServer(formData)
                     send.then(res => {
                         /*  console.log("ok") */
                         fetchWorks().then(() => {
@@ -522,19 +515,19 @@ function modal2_on() {
 /**
  * this fonction is used to be ready to go to the editor mode whith a click on login,only used when the editor mode is running
  */
-function go_to_editor_mode() {
+function goToEditorMode() {
     const nav_login = document.getElementById("nav_login");
     const supervisor_access = document.querySelector(".supervisor_access")
     /* this next code do modifications and return on the website in editor mode */
 
-    nav_log_out_in_toggle()// --->login on the website-page-header becomes logout                
-    nav_login.removeEventListener("click", main_hiddenmain_toggle)//remove action of the  login/logout button of the header              
-    main_hiddenmain_toggle()/* go to the editor-main-mode */
-    header_edition_mode_bar_toggle()// move on display of header edition mode
-    gallery_search_categories_toggle_deleted()//delete display og gallery search
-    supervisor_access_toggle()//move on dosplay of the button "modifier"
-    nav_login.addEventListener("click", return_to_basic_mode);//manages click on login/logout on the header of the website
-    supervisor_access.addEventListener("click", modal_on);//manages click to move modal on
+    toggleNavLogin()// --->login on the website-page-header becomes logout                
+    nav_login.removeEventListener("click", toggleMain)//remove action of the  login/logout button of the header              
+    toggleMain()/* go to the editor-main-mode */
+    toggleModeEditionBar()// move on display of header edition mode
+    ToggleButtonBarClassDisplay()//delete display og gallery search
+    toggleSupervisorAccess()//move on dosplay of the button "modifier"
+    nav_login.addEventListener("click", returnToBasicMode);//manages click on login/logout on the header of the website
+    supervisor_access.addEventListener("click", showModalGaleryPhoto);//manages click to move modal on
 
 }
 
@@ -543,33 +536,33 @@ function go_to_editor_mode() {
  * manages submit button to get autenthication,manages login button to return to the website before submit if necessary,goes to editor mode if autenthication is successfull
  *
  */
-function go_to_autenthication_editor() {
+function goToLoginModal() {
 
     const nav_login = document.getElementById("nav_login");
-    nav_login.addEventListener("click", main_hiddenmain_toggle);//manages click on login/logout on the header of the website
+    nav_login.addEventListener("click", toggleMain);//manages click on login/logout on the header of the website
 
     /* manages click on submit for autenthication */
     document.forms["editor_form"].addEventListener("submit", function (event) {//manages click on form submit "se connecter"        
         event.preventDefault();
-        let server_autenthication_request = autenthication_request(//call function autenthication_request with 2 parameters inside the form
+        let serverAutenthicationRequest = autenthicationRequest(//call function autenthicationRequest with 2 parameters inside the form
             document.forms["editor_form"]["editor_email"]["value"],
             document.forms["editor_form"]["editor_password"]["value"]
         );
 
         //treatment of errors
-        server_autenthication_request.catch((error) => {
+        serverAutenthicationRequest.catch((error) => {
             /* manages problems of network */
             alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`);
         });
         //treatment of api response
-        server_autenthication_request.then(/* response is an object with userid and token */
+        serverAutenthicationRequest.then(/* response is an object with userid and token */
             response => {/* in this part of code acces is confirmed so it can manage a new stage */
 
                 /* sessionStorage.setItem("userId", response.userId)//store userId on session storage */
                 sessionStorage.setItem("token", response.token)//store token on session storage
 
                 /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r))//fonctionne,   pas besoin du storage    */
-                go_to_editor_mode()//display editor mode                                
+                goToEditorMode()//display editor mode                                
             }
         );
     });
@@ -595,7 +588,7 @@ function deleteWorks() {
                     works_fetch.then(() => {
                         displayGallery()//display gallery with the new work
                         displayGallery(0, tag, 1)//gallery display in modal                                                  
-                    }).then(modal_off).then(modal_on)
+                    }).then(hideModalGaleryPhoto).then(showModalGaleryPhoto)
                 })
             }
         })
@@ -606,12 +599,12 @@ function deleteWorks() {
 
 let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 const categories = fetchCategories()//promise which contains datas categories from the api
-works_fetch.then(response => console.log(response))
+/* works_fetch.then(response => console.log(response)) */
 //treatment of errors manages problems of network 
 categories.catch((error) => alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`))
-displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons to
+displayCategoryButtonsBar(); //call function to display search buttons,this function manage clicks on buttons to
 displayGallery(); //displays all images
-go_to_autenthication_editor(); //manages login if necessary
+goToLoginModal(); //manages login if necessary
 /* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtaessentialined from the session store */
 /* works_fetch.then(r=>console.log("in main code works_fetch.then()",r))//fonctionne ici */
 let tag = ".gallery_photos"

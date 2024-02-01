@@ -94,7 +94,7 @@ async function sendDatasToServer(formData) {
         body: formData,
     });
 
-    return r.ok ? alert("Le travail a été ajouté") : alert(`ERREUR : ${r.status}`)
+    return r.ok ? null : alert(`ERREUR : ${r.status}`)
 
 }
 /**
@@ -139,39 +139,39 @@ function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
             gallery.innerHTML = ""; //erase the gallery before traitment,usefull in others parts of code
 
             worksArray.map((item) => {//iteration for each item
-
-                /**
-                 * displays images in the gallery for each item
-                 */
-                function display(arg3) {
-
-                    //internal function available only here which is used to optimise code
-                    let figure = document.createElement("figure");
-                    gallery.appendChild(figure); /* these instructions create the tags figure */
-                    let img = document.createElement("img"); //create tag img
-                    img.src = item.imageUrl; //path of img
-                    img.alt = item.title; //alternative text of img
-                    figure.appendChild(img); /* these instructions add images in figure */
-                    let figcaption = document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
-                    figcaption.innerText = item.title;
-                    figure.appendChild(figcaption);
-                    if (arg3 === 1) {
-                        let logo = document.createElement("img")
-                        logo.src = "./assets/icons/trash-can-solid.svg"
-                        logo.classList.add("trash_img")
-                        let div = document.createElement("div")
-                        div.classList.add("trash")
-                        div.setAttribute("data-id", item.id)
-                        figure.appendChild(div)
-                        div.appendChild(logo)
-                    }
-                }/* end of function display */
-
                 if (!arg) { display(arg3); } //select and display the correpondant content of argument
                 else {
                     item.categoryId === arg ? display() : null;
                 }
-            });
+               /**
+                 * displays images in the gallery for each item
+                 */
+               function display(arg3) {
+
+                //internal function available only here which is used to optimise code
+                let figure = document.createElement("figure");
+                gallery.appendChild(figure); /* these instructions create the tags figure */
+                let img = document.createElement("img"); //create tag img
+                img.src = item.imageUrl; //path of img
+                img.alt = item.title; //alternative text of img
+                figure.appendChild(img); /* these instructions add images in figure */
+                let figcaption = document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
+                figcaption.innerText = item.title;
+                figure.appendChild(figcaption);
+                if (arg3 === 1) {
+                    let logo = document.createElement("img")
+                    logo.src = "./assets/icons/trash-can-solid.svg"
+                    logo.classList.add("trash_img")
+                    let div = document.createElement("div")
+                    div.classList.add("trash")
+                    div.setAttribute("data-id", item.id)
+                    figure.appendChild(div)
+                    div.appendChild(logo)
+                }
+            }/* end of function display */
+            }); 
+            (arg3 === 1) ? deleteWorks(): null//to put trashes active on click
+
         }
     );
 }
@@ -317,7 +317,7 @@ function modal_on() {
     modal_close1.addEventListener("click", modal_off) //make the click active on button 'close'   
     modal_close2.addEventListener("click", modal_off)//make the click active 
     button_add_picture.addEventListener("click", modal2_on)
-    deleteWorks()//manages trash buttons in modal,can be used only in modal_on because trashes do not exist elsewhere
+    deleteWorks()//manages trash buttons in modal,can be used in modal_on because trashes exist
 }
 /**
  * move display modal off
@@ -491,7 +491,7 @@ function modal2_on() {
                     console.log(item.value) */
                     item.value === category.value ? formData.append("category", item.index) : null
                 })
-               
+
                 if (confirm("Etes vous sûre de vouloir envoyer ?")) {
                     const send = sendDatasToServer(formData)
                     send.then(res => {
@@ -506,7 +506,6 @@ function modal2_on() {
                             /*  console.log ("modal2.remove ok") */
                             modal2.remove()
                         })
-
                     })
                 }
                 else { modal2.remove() }
@@ -574,7 +573,7 @@ function go_to_autenthication_editor() {
     });
 }
 /**
- * this function delete work with an id and refresh the displays of galleriescan ,it can be used only in modal_on because trashes do not exist elsewhere
+ * this function adds an event "click" on the buttons with a trash on them,deletes correspondant work and refresh the displays of galleries ,it can be used only where trashes are defined
  * @param {} id 
  */
 function deleteWorks() {
@@ -594,7 +593,7 @@ function deleteWorks() {
                     works_fetch.then(() => {
                         displayGallery()//display gallery with the new work
                         displayGallery(0, tag, 1)//gallery display in modal                                                  
-                    }).then(modal_off) .then(modal_on)
+                    }).then(modal_off).then(modal_on)
                 })
             }
         })
@@ -605,10 +604,10 @@ function deleteWorks() {
 
 let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 const categories = fetchCategories()//promise which contains datas categories from the api
-works_fetch.then(response => console.log(response))
+/* works_fetch.then(response => console.log(response)) */
 //treatment of errors manages problems of network 
 categories.catch((error) => alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`))
-displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way
+displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons to
 displayGallery(); //displays all images
 go_to_autenthication_editor(); //manages login if necessary
 /* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtaessentialined from the session store */

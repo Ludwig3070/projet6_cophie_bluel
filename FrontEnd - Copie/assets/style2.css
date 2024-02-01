@@ -26,9 +26,10 @@
 }
 
 .gallery_photos{
-    width: 425px;
+    width: 424px;
     height: 390px;
-    overflow-y: auto;      
+    overflow-y: auto;
+    overflow-x: hidden;      
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-column-gap: 6px;
