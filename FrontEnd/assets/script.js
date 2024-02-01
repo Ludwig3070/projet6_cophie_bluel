@@ -448,16 +448,18 @@ function modal2_on() {
              */
             function compare() {
                 let button = document.querySelector(".modal2 button")
-
+                const valider = document.querySelector(".modal2 .modal_button")
                 if (!title.value || !category.value) {
                     button.classList.contains("button_active") ? button.classList.remove("button_active") : null
                     button.classList.add("passive_modal_button")
+                    valider.removeEventListener('click', sendToServer)
                     return
                 }
                 button.classList.remove("passive_modal_button")
                 button.classList.add("button_active")
-                const valider = document.querySelector(".modal2 .modal_button")
-                valider.classList.contains("button_active") ? valider.addEventListener('click', sendToServer) : null
+                valider.addEventListener('click', sendToServer)
+                validationCondition = (title.value&&category.value&&valider.classList.contains("button_active"))
+                validationCondition ? valider.addEventListener('click', sendToServer) : valider.removeEventListener('click', sendToServer)
             }
             function sendToServer() {
                 formData.append("title", title.value)
