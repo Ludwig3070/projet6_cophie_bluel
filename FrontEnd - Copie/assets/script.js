@@ -171,9 +171,7 @@ function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
                 else {
                     item.categoryId === arg ? display() : null;
                 }
-            }); 
-            (arg3 === 1) ? deleteWorks(): null
-
+            });
         }
     );
 }
@@ -319,7 +317,7 @@ function modal_on() {
     modal_close1.addEventListener("click", modal_off) //make the click active on button 'close'   
     modal_close2.addEventListener("click", modal_off)//make the click active 
     button_add_picture.addEventListener("click", modal2_on)
-    deleteWorks()//manages trash buttons in modal,can be used in modal_on because trashes exist
+    deleteWorks()//manages trash buttons in modal,can be used only in modal_on because trashes do not exist elsewhere
 }
 /**
  * move display modal off
@@ -493,7 +491,7 @@ function modal2_on() {
                     console.log(item.value) */
                     item.value === category.value ? formData.append("category", item.index) : null
                 })
-
+               
                 if (confirm("Etes vous sûre de vouloir envoyer ?")) {
                     const send = sendDatasToServer(formData)
                     send.then(res => {
@@ -508,6 +506,7 @@ function modal2_on() {
                             /*  console.log ("modal2.remove ok") */
                             modal2.remove()
                         })
+
                     })
                 }
                 else { modal2.remove() }
@@ -575,7 +574,7 @@ function go_to_autenthication_editor() {
     });
 }
 /**
- * this function adds an event "click" on the buttons with a trash on them,deletes correspondant work and refresh the displays of galleries ,it can be used only where trashes are defined
+ * this function delete work with an id and refresh the displays of galleriescan ,it can be used only in modal_on because trashes do not exist elsewhere
  * @param {} id 
  */
 function deleteWorks() {
@@ -595,7 +594,7 @@ function deleteWorks() {
                     works_fetch.then(() => {
                         displayGallery()//display gallery with the new work
                         displayGallery(0, tag, 1)//gallery display in modal                                                  
-                    }).then(modal_off).then(modal_on)
+                    }).then(modal_off) .then(modal_on)
                 })
             }
         })
@@ -609,7 +608,7 @@ const categories = fetchCategories()//promise which contains datas categories fr
 works_fetch.then(response => console.log(response))
 //treatment of errors manages problems of network 
 categories.catch((error) => alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`))
-displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons to
+displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way
 displayGallery(); //displays all images
 go_to_autenthication_editor(); //manages login if necessary
 /* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtaessentialined from the session store */
