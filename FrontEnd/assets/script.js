@@ -97,7 +97,27 @@ async function sendDatasToServer(formData) {
     return r.ok ? alert("Le travail a été ajouté") : alert(`ERREUR : ${r.status}`)
 
 }
+/**
+ * delete a work on the API by id
+ * @param {number} id 
+ * @returns 
+ */
+async function deleteWork(id) {
+    /* to use hidden main code */
+    const token = sessionStorage.getItem("token")
 
+
+
+    const r = await fetch(`http://localhost:5678/api/works/${id}`, {
+
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}`, },
+
+    });
+
+    return r.ok ? null : alert(`ERREUR : ${r.status}`)
+
+}
 
 
 
@@ -297,6 +317,7 @@ function modal_on() {
     modal_close1.addEventListener("click", modal_off) //make the click active on button 'close'   
     modal_close2.addEventListener("click", modal_off)//make the click active 
     button_add_picture.addEventListener("click", modal2_on)
+    deleteWorks()//manages trash buttons in modal,can be used only in modal_on because trashes do not exist elsewhere
 }
 /**
  * move display modal off
@@ -458,7 +479,7 @@ function modal2_on() {
                 button.classList.remove("passive_modal_button")
                 button.classList.add("button_active")
                 valider.addEventListener('click', sendToServer)
-                validationCondition = (title.value&&category.value&&valider.classList.contains("button_active"))
+                validationCondition = (title.value && category.value && valider.classList.contains("button_active"))
                 validationCondition ? valider.addEventListener('click', sendToServer) : valider.removeEventListener('click', sendToServer)
             }
             function sendToServer() {
@@ -470,17 +491,11 @@ function modal2_on() {
                     console.log(item.value) */
                     item.value === category.value ? formData.append("category", item.index) : null
                 })
-                /* console.log("formdata=",formData) */
-                /*  let send
-                 confirm("Etes vous sûre de vouloir envoyer ?") ? send = sendDatasToServer(formData) : modal2.remove()
-                 send.then(res => {
-                     displayGallery()
-                     modal2.remove()
-                 }) */
+               
                 if (confirm("Etes vous sûre de vouloir envoyer ?")) {
                     const send = sendDatasToServer(formData)
                     send.then(res => {
-                        console.log("ok")
+                        /*  console.log("ok") */
                         fetchWorks().then(() => {
                             works_fetch = fetchWorks()//mandatory to upload the new work
                             /* console.log(works_fetch) */
@@ -558,12 +573,39 @@ function go_to_autenthication_editor() {
         );
     });
 }
+/**
+ * this function delete work with an id and refresh the displays of galleriescan ,it can be used only in modal_on because trashes do not exist elsewhere
+ * @param {} id 
+ */
+function deleteWorks() {
+    let allTrashes = document.querySelectorAll('.trash')//nodeList
+    allTrashes = Array.from(allTrashes)
+    /* console.log("trashes=",allTrashes)   */
+    allTrashes.forEach((trash) => {
+        /* console.log("trash=",trash.dataset.id) */
+        /* trash.addEventListener("click",event=>console.log(trash.dataset.id)) */
+        trash.addEventListener("click", event => {
+            if (confirm("Voulez vous supprimer ce contenu ?")) {
+                /* console.log(trash.dataset.id) */
+                const del = deleteWork(trash.dataset.id)
+                del.then(res => {
+                    /*  console.log("ok") */
+                    works_fetch = fetchWorks() //mandatory to upload the new work                           
+                    works_fetch.then(() => {
+                        displayGallery()//display gallery with the new work
+                        displayGallery(0, tag, 1)//gallery display in modal                                                  
+                    }).then(modal_off) .then(modal_on)
+                })
+            }
+        })
+    })
+}
 
 /* main code */
 
 let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 const categories = fetchCategories()//promise which contains datas categories from the api
-/* works_fetch.then(response=>console.log(response)) */
+works_fetch.then(response => console.log(response))
 //treatment of errors manages problems of network 
 categories.catch((error) => alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`))
 displayGallerySearch(); //call function to display search buttons,this function manage clicks on buttons too,there's no other way

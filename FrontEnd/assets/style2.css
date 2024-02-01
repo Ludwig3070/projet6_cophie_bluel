@@ -28,7 +28,7 @@
 .gallery_photos{
     width: 425px;
     height: 390px;
-    overflow-y: scroll;      
+    overflow-y: auto;      
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-column-gap: 6px;
