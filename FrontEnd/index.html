@@ -20,10 +20,10 @@
 
 <body>
 	<header>
-		<section class="edition_mode none">
-			<img src="./assets/icons/Vector_white.svg" alt="">
+		<div class="edition_mode none">
+			<img src="./assets/icons/Vector_white.svg" alt="icone">
 			<p>Mode édition</p>
-		</section>
+		</div>
 		<section id="header">
 			<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 			<nav>
@@ -31,14 +31,14 @@
 					<li>projets</li>
 					<li>contact</li>
 					<li><a id="nav_login" href="#">login</a></li>
-					<li><img src="./assets/icons/icons8-instagram 1.svg" alt="Instagram"></li>
+					<li><img src="./assets/icons/icons8-instagram1.svg" alt="Instagram"></li>
 				</ul>
 			</nav>
 		</section>
 
 	</header>
 	<main>
-		<section id="introduction">
+		<div id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
 			</figure>
@@ -52,13 +52,12 @@
 				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
 					décorateur(trice)</p>
 			</article>
-		</section>
+		</div>
 		<section class="modal no_visible ">
 			<h2>Galerie photo </h2>
 			<img src="./assets/icons/xmark.svg" alt="logo" class="close">
 			<div class="gallery_photos"></div>
 			<button class="modal_button add_for_modal_button button_active">Ajouter une photo</button>
-
 		</section>
 		<section id="portfolio">
 			<h2>Mes Projets <span class="supervisor_access deleted"><img src="./assets/icons/Vector_black.svg"
@@ -68,8 +67,7 @@
 					<span>Tous</span>
 				</button>
 			</div>
-			<div class="gallery">
-				<!-- code deleted ,JS manages -->
+			<div class="gallery"><!-- code deleted ,JS manages --></div>
 		</section>
 		<section id="contact">
 			<h2>Contact</h2>
@@ -91,8 +89,8 @@
 		<section id="login">
 			<h2>Login</h2>
 			<form name="editor_form">
-				<label for="login">E-mail</label>
-				<input type="email" name="editor_email" required>
+				<label for="user_login">E-mail</label>
+				<input type="email" name="editor_email" id="user_login" required>
 				<label for="editor_password">Mot de passe</label>
 				<input type="password" name="editor_password" id="editor_password" required value="S0phie">
 				<input type="submit" value="Se connecter">
@@ -107,7 +105,7 @@
 			<h2>Ajout photo </h2>
 			<img src="./assets/icons/xmark.svg" alt="logo" class="close" id="cross2">
 			<img src="./assets/icons/arrow-left.svg" alt="logo" class="arrow_left" id="modal2_arrow_left">
-			<div class="modal2_get_photo_canva" >
+			<div class="modal2_get_photo_canva">
 				<img src="./assets/icons/picture-svgrepo-com 1.svg" alt="picture" class="imgOfCanvas">
 				<label for="addPhotos" class="label_input_photos">+ Ajouter
 					photo</label><!-- using the label to style in css -->
@@ -119,7 +117,7 @@
 				<input type="text" name="title" id="title" required>
 				<label for="category">Catégorie</label>
 				<select name="category" id="category" required>
-					<option value=""></option>
+					<option label=""></option><!-- valid give an error on w3c validator,label is a solution -->
 				</select>
 			</form>
 			<button class="modal_button add_for_modal_button passive_modal_button">Valider</button>
