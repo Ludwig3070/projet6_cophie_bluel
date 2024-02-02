@@ -28,7 +28,7 @@
 
 
 
-/* get data from the server */
+/* concern the API of the server */
 /**
  * function that returns a promise with url data or an alert if the server is down
  * @returns promise
@@ -38,7 +38,6 @@ async function fetchWorks() {
     const r = await fetch("http://localhost:5678/api/works");
     return r.ok ? r.json() : alert("Serveur injoignable"); /* si r.ok return r.json() else return alert */
 }
-
 /**
  * put autenthicaton data to get a tocken end a user id
  * @param {string} mail
@@ -69,12 +68,19 @@ async function autenthicationRequest(mail, password) {
             );
     }
 }
-
+/**
+ * 
+ * @returns a promise with an object json
+ */
 async function fetchCategories() {
     const r = await fetch("http://localhost:5678/api/categories");
     return r.ok ? await r.json() : alert("Serveur injoignable"); /* if r.ok return r.json() else return alert */
 }
-
+/**
+ * 
+ * @param {formdata} formData with an picture(jpeg,png),a title(string), category(number)
+ * @returns 
+ */
 async function sendWorkToServer(formData) {
     /* to use hidden main code */
     const token = sessionStorage.getItem("token")
@@ -227,7 +233,6 @@ function displayCategoryButtonsBar() {
         }
     });
 }
-
 /**
  * swap main    main(hidden) <--->main vice versa + include fontweight toggle of login/logout on the header,toggle font weight 400<--->600 and vice versa on navlogin/logout
  */
@@ -238,7 +243,6 @@ function toggleMain() {
     const nav_login = document.getElementById("nav_login");
     nav_login.classList.contains("li_logout") ? nav_login.classList.remove("li_logout") : nav_login.classList.add("li_logout")
 }
-
 /**
  * toggle display of edition mode in the header (opacity 0 <---> 1)
  */
@@ -248,7 +252,6 @@ function toggleModeEditionBar() {
     edition_mode.classList.contains("none") ? edition_mode.classList.remove("none") : edition_mode.classList.add("none")
     header.classList.contains("margin_top_100px") ? header.classList.remove("margin_top_100px") : header.classList.add("margin_top_100px")
 }
-
 /**
  * toggle logout/login text on the header and vice versa
  */
@@ -312,7 +315,9 @@ function hideModalGaleryPhoto() {
     cover_page.remove()//delete page over index.html
     modal.classList.add("no_visible") // display off modal 
 }
-
+/**
+ * displays end manages the modal "AddPhoto"
+ */
 function showModalAddPhoto() {
     /* https://www.youtube.com/watch?v=oh6Wtys98ig */
     /* https://grafikart.fr/tutoriels/javascript-templates-2076 */
@@ -498,8 +503,6 @@ function showModalAddPhoto() {
     }
 
 }
-
-
 /**
  * this fonction is used to be ready to go to the editor mode whith a click on login,only used when the editor mode is running
  */
@@ -518,8 +521,6 @@ function goToEditorMode() {
     supervisor_access.addEventListener("click", showModalGaleryPhoto);//manages click to move modal on
 
 }
-
-
 /**
  * manages submit button to get autenthication,manages login button to return to the website before submit if necessary,goes to editor mode if autenthication is successfull
  *
@@ -582,9 +583,7 @@ function deleteWorks() {
         })
     })
 }
-
 /* main code */
-
 let works_fetch = fetchWorks(); /* works_fetch is a promise which contains the array of objects to be processed, it must be called first to fetch the data from the server and be able to use the functions */
 const categories = fetchCategories()//promise which contains datas categories from the api
 /* works_fetch.then(response => console.log(response)) */
