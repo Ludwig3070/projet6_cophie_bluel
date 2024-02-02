@@ -105,24 +105,12 @@ async function sendWorkToServer(formData) {
 async function deleteWork(id) {
     /* to use hidden main code */
     const token = sessionStorage.getItem("token")
-
-
-
     const r = await fetch(`http://localhost:5678/api/works/${id}`, {
-
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}`, },
-
     });
-
-    return r.ok ? null : alert(`ERREUR : ${r.status}`)
-
+    return r.ok ? alert("Travail effacé") : alert(`ERREUR : ${r.status}`)
 }
-
-
-
-
-
 /* all functions */
 
 /**
@@ -312,7 +300,7 @@ function showModalGaleryPhoto() {
     modal_close1.addEventListener("click", hideModalGaleryPhoto) //make the click active on button 'close'   
     modal_close2.addEventListener("click", hideModalGaleryPhoto)//make the click active 
     button_add_picture.addEventListener("click", showModalAddPhoto)
-    deleteWorks()//manages trash buttons in modal,can be used in showModalGaleryPhoto because trashes exist
+   /*  deleteWorks()//manages trash buttons in modal,can be used in showModalGaleryPhoto because trashes exist */
 }
 /**
  * move display modal off
