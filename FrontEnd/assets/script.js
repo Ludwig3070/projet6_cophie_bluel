@@ -115,7 +115,7 @@ async function deleteWork(id) {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}`, },
     });
-    return r.ok ? alert("Travail effacé") : alert(`ERREUR : ${r.status}`)
+    return r.ok ? null : alert(`ERREUR : ${r.status}`)
 }
 /* all functions */
 
@@ -137,34 +137,34 @@ function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
                 else {
                     item.categoryId === arg ? display() : null;
                 }
-               /**
-                 * displays images in the gallery for each item
-                 */
-               function display(arg3) {
+                /**
+                  * displays images in the gallery for each item
+                  */
+                function display(arg3) {
 
-                //internal function available only here which is used to optimise code
-                let figure = document.createElement("figure");
-                gallery.appendChild(figure); /* these instructions create the tags figure */
-                let img = document.createElement("img"); //create tag img
-                img.src = item.imageUrl; //path of img
-                img.alt = item.title; //alternative text of img
-                figure.appendChild(img); /* these instructions add images in figure */
-                let figcaption = document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
-                figcaption.innerText = item.title;
-                figure.appendChild(figcaption);
-                if (arg3 === 1) {
-                    let logo = document.createElement("img")
-                    logo.src = "./assets/icons/trash-can-solid.svg"
-                    logo.classList.add("trash_img")
-                    let div = document.createElement("div")
-                    div.classList.add("trash")
-                    div.setAttribute("data-id", item.id)
-                    figure.appendChild(div)
-                    div.appendChild(logo)
-                }
-            }/* end of function display */
-            }); 
-            (arg3 === 1) ? deleteWorks(): null//to put trashes active on click
+                    //internal function available only here which is used to optimise code
+                    let figure = document.createElement("figure");
+                    gallery.appendChild(figure); /* these instructions create the tags figure */
+                    let img = document.createElement("img"); //create tag img
+                    img.src = item.imageUrl; //path of img
+                    img.alt = item.title; //alternative text of img
+                    figure.appendChild(img); /* these instructions add images in figure */
+                    let figcaption = document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
+                    figcaption.innerText = item.title;
+                    figure.appendChild(figcaption);
+                    if (arg3 === 1) {
+                        let logo = document.createElement("img")
+                        logo.src = "./assets/icons/trash-can-solid.svg"
+                        logo.classList.add("trash_img")
+                        let div = document.createElement("div")
+                        div.classList.add("trash")
+                        div.setAttribute("data-id", item.id)
+                        figure.appendChild(div)
+                        div.appendChild(logo)
+                    }
+                }/* end of function display */
+            });
+            (arg3 === 1) ? deleteWorks() : null//to put trashes active on click
 
         }
     );
@@ -239,7 +239,7 @@ function displayCategoryButtonsBar() {
 function toggleMain() {
     const mains = document.querySelectorAll("main"); //it is a nodelist with 2 tags main
     mains.forEach((main) => main.toggleAttribute("hidden")); //toggles the attribte hidden
-    
+
     const nav_login = document.getElementById("nav_login");
     nav_login.classList.contains("li_logout") ? nav_login.classList.remove("li_logout") : nav_login.classList.add("li_logout")
 }
@@ -303,7 +303,7 @@ function showModalGaleryPhoto() {
     modal_close1.addEventListener("click", hideModalGaleryPhoto) //make the click active on button 'close'   
     modal_close2.addEventListener("click", hideModalGaleryPhoto)//make the click active 
     button_add_picture.addEventListener("click", showModalAddPhoto)
-   /*  deleteWorks()//manages trash buttons in modal,can be used in showModalGaleryPhoto because trashes exist */
+    /*  deleteWorks()//manages trash buttons in modal,can be used in showModalGaleryPhoto because trashes exist */
 }
 /**
  * move display modal off
@@ -460,12 +460,14 @@ function showModalAddPhoto() {
                 const valider = document.querySelector(".modal2 .modal_button")
                 if (!title.value || !category.value) {
                     button.classList.contains("button_active") ? button.classList.remove("button_active") : null
+                    button.classList.contains("button") ? button.classList.remove("button") : null
                     button.classList.add("passive_modal_button")
                     valider.removeEventListener('click', sendToServer)
                     return
                 }
                 button.classList.remove("passive_modal_button")
                 button.classList.add("button_active")
+                button.classList.add("button")
                 valider.addEventListener('click', sendToServer)
                 validationCondition = (title.value && category.value && valider.classList.contains("button_active"))
                 validationCondition ? valider.addEventListener('click', sendToServer) : valider.removeEventListener('click', sendToServer)
