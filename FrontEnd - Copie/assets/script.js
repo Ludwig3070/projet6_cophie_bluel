@@ -115,7 +115,7 @@ async function deleteWork(id) {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}`, },
     });
-    return r.ok ? alert("Travail effacé") : alert(`ERREUR : ${r.status}`)
+    return r.ok ? null : alert(`ERREUR : ${r.status}`)
 }
 /* all functions */
 
@@ -460,12 +460,14 @@ function showModalAddPhoto() {
                 const valider = document.querySelector(".modal2 .modal_button")
                 if (!title.value || !category.value) {
                     button.classList.contains("button_active") ? button.classList.remove("button_active") : null
+                    button.classList.contains("button") ? button.classList.remove("button") : null
                     button.classList.add("passive_modal_button")
                     valider.removeEventListener('click', sendToServer)
                     return
                 }
                 button.classList.remove("passive_modal_button")
                 button.classList.add("button_active")
+                button.classList.add("button")
                 valider.addEventListener('click', sendToServer)
                 validationCondition = (title.value && category.value && valider.classList.contains("button_active"))
                 validationCondition ? valider.addEventListener('click', sendToServer) : valider.removeEventListener('click', sendToServer)

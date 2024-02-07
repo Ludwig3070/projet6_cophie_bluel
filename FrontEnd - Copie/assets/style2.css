@@ -1,119 +1,122 @@
 /* for first modal */
 
-.modal{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 688px;
-    width: 630px;
-    position: fixed;
-    top: 40%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-40%);
-    background-color: #fff;
-    border-radius: 10px;
-    z-index: 100;
-    opacity: 1;
-    transition: all 0.3s cubic-bezier(1,0.15,0.6,0.81);
-
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 688px;
+  width: 630px;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-40%);
+  background-color: #fff;
+  border-radius: 10px;
+  z-index: 100;
+  opacity: 1;
+  transition: all 0.3s cubic-bezier(1, 0.15, 0.6, 0.81);
 }
 
 .modal h2 {
-    font-size: 26px;
-    color: black;
-    font-weight: 400;
-    font-family: 'Work Sans';
-    margin-top: 60px;
-    margin-bottom: 55px;    
+  font-size: 26px;
+  color: black;
+  font-weight: 400;
+  font-family: "Work Sans";
+  margin-top: 60px;
+  margin-bottom: 55px;
 }
 
-.gallery_photos{
-    width: 424px;
-    height: 390px;
-    overflow-y: auto;
-    overflow-x: hidden;      
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	grid-column-gap: 6px;
-	grid-row-gap: 22px;   
+
+.gallery_photos {
+  width: 424px;
+  height: 390px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-column-gap: 6px;
+  grid-row-gap: 22px;
+  scrollbar-width: thin;
+  scrollbar-color: #6ca49a white;
 }
 .gallery_photos figure {
-    width:77px ;
-    height: 104px;
-    position: relative;/* kk */    
+  width: 77px;
+  height: 104px;
+  position: relative;
 }
 .gallery_photos figure > img {
-    object-fit: cover;
-    width:76px ;
-    height: 104px;
+  object-fit: cover;
+  width: 76px;
+  height: 104px;
 }
-.gallery_photos figure figcaption{
-    display: none;
-}
-
-.add_for_modal_button{
-    width: 237px;
-    height: 36px;
-    position: absolute;
-    bottom:54px ;    
-    color: white;
-}
-.passive_modal_button{
-    background: #A7A7A7;
-    border: none;
-}
-.close{
-    position: absolute;
-    top: 26px;
-    right: 30px;
-    cursor: pointer;
-    
-}
-.add_for_modal_button::before{/* line before button */
-    content: "";
-    display: block;    
-    height: 1px;
-    width: 420px;
-    background: #B3B3B3;
-    position: absolute;
-    top: -38px;
-    transform: translateX(-25%);   
-}
-.trash{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 17px;
-    height: 17px;
-    background-color: black;
-    position: absolute;
-    top: 7px;
-    right: 7px;
-    border-radius: 3px;
-    cursor: pointer;
-    
-}
-.trash_img{
-    
-    width: 9px;
-    height: 11px;
-    
-    
-}
-.no_visible{
-    visibility: hidden;
-    opacity: 0;
-}
-.cover_page{
-    display: block;
-	background: rgba(0, 0, 0, 0.4);	
-	position: fixed;
-    z-index: 10;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;  
-  
-    
+.gallery_photos figure figcaption {
+  display: none;
 }
 
+.add_for_modal_button {
+  width: 237px;
+  height: 36px;
+  position: absolute;
+  bottom: 54px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.passive_modal_button {
+  background: #a7a7a7;
+  border: none;
+  cursor: auto;
+}
+.close {
+  position: absolute;
+  top: 26px;
+  right: 30px;
+  cursor: pointer;
+}
+.add_for_modal_button::before {
+  /* line before button */
+  content: "";
+  display: block;
+  height: 1px;
+  width: 420px;
+  background: #b3b3b3;
+  position: absolute;
+  top: -38px;
+}
+.trash {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 17px;
+  height: 17px;
+  background-color: black;
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.trash:hover {
+  transform: scale(1.3);
+  transition: transform 0.2s cubic-bezier(0.45, 0.03, 0.515, 0.955);
+}
+
+.trash_img {
+  width: 9px;
+  height: 11px;
+}
+.no_visible {
+  visibility: hidden;
+  opacity: 0;
+}
+.cover_page {
+  display: block;
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}

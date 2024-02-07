@@ -83,14 +83,7 @@ async function fetchCategories() {
  */
 async function sendWorkToServer(formData) {
     /* to use hidden main code */
-    const token = sessionStorage.getItem("token")
-
-    /*  const category = Number(formData.get('category'))
-     const title = formData.get('title')
- 
-     console.log(category, typeof category)
-     console.log(title, typeof title) */
-
+    const token = sessionStorage.getItem("token")   
 
 
     const r = await fetch("http://localhost:5678/api/works", {
@@ -121,26 +114,26 @@ async function deleteWork(id) {
 
 /**
  * 
-displays images in the gallery according to the category of the "arg" parameter (0=all) (1..3 for others categories)
- * @param {number} arg categorie to be display on gallery
+displays images in the gallery according to the category of the "arg" parameter (0=all) (1..3 for others categories),selectedTag is the tag on which function must be performed
+ * @param {number} arg categorie to be display on selectedTag
  */
-function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
+function displayGallery(arg, selectedTag = '.gallery', trash = false) {
     works_fetch.then(
         //promise of works_fetch accepted
         (worksArray) => {
             /* worksArray is the object (here an array) result of the promise */
-            let gallery = document.querySelector(arg2);
+            let gallery = document.querySelector(selectedTag);
             gallery.innerHTML = ""; //erase the gallery before traitment,usefull in others parts of code
 
             worksArray.map((item) => {//iteration for each item
-                if (!arg) { display(arg3); } //select and display the correpondant content of argument
+                if (!arg) { display(trash); } //select and display the correpondant content of argument
                 else {
-                    item.categoryId === arg ? display() : null;
+                    item.categoryId === arg ? display() : null;//if arg = categoryID-->diplay()
                 }
                 /**
                   * displays images in the gallery for each item
                   */
-                function display(arg3) {
+                function display(trash=false) {
 
                     //internal function available only here which is used to optimise code
                     let figure = document.createElement("figure");
@@ -152,7 +145,7 @@ function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
                     let figcaption = document.createElement("figcaption"); /* the next three instructions add figcaption and its text  */
                     figcaption.innerText = item.title;
                     figure.appendChild(figcaption);
-                    if (arg3 === 1) {
+                    if (trash === true) {//add trash bin on image
                         let logo = document.createElement("img")
                         logo.src = "./assets/icons/trash-can-solid.svg"
                         logo.classList.add("trash_img")
@@ -164,7 +157,7 @@ function displayGallery(arg, arg2 = '.gallery', arg3 = 0) {
                     }
                 }/* end of function display */
             });
-            (arg3 === 1) ? deleteWorks() : null//to put trashes active on click
+            (trash === true) ? manageTrashbin() : null//to put trashes active on click
 
         }
     );
@@ -184,10 +177,9 @@ function displayCategoryButtonsBar() {
         /* this first part of code allows you to fill search_categories with the buttons in the same order as the FIGMA model without using another HTML request
         (http://localhost:5678/api/categories)+ GET */
 
-        let array1 = r.map((item) => [item.category]); //make an array of arrays with categories and unordered id
-        let datas = array1.map((item) => item[0]); //data is an array of OBJECTS with unordered categories and id
-        sessionStorage.setItem("datas", JSON.stringify(datas))//store datas on session storage, delete further if don't used
-        /* console.log(datas); */
+        let array1 = r.map((item) => [item.category]); //make an array of ARRAYS with categories and unordered id
+        let datas = array1.map((item) => item[0]); //datas is an array of OBJECTS with unordered categories and id
+       /* console.log(array1) */
         datas.sort(function (a, b) {
             //sorting array with ascending id
             return a.id - b.id;
@@ -197,9 +189,9 @@ function displayCategoryButtonsBar() {
         for (let i of datas) {
             tab.push(i.name);
         } //filling the table with the names (STRING) of the ordered categories but with duplicates
-        /* console.log(tab);  */
+        console.log(tab); 
         let set = new Set(tab); //this set remove all duplicates (because tab is an array of STRINGs, with objects it doesn't work)
-        /* console.log(set); */
+        console.log(set);
 
         /* this second part of code creates the buttons in search_categorie  */
         let gallerySearch = document.querySelector(".search_categories");
@@ -209,13 +201,14 @@ function displayCategoryButtonsBar() {
             let button = document.createElement("button"); //create a button
             button.classList.add("button"); //add class on the button
             button.innerText = value; //add txt on the button
-            button.setAttribute("data-id", i);
-            gallerySearch.appendChild(button);
+            button.setAttribute("data-id", i);//add a dataset id on the button
+            gallerySearch.appendChild(button);//create the button in the DOM
             i++;
         }); //create the buttons in the gallery-categorie-search-bar
 
         /* this third part of code manages buttons on click */
         let buttons = document.querySelectorAll(".search_categories button");
+
         /**
          * remove class button_active on all buttons and put active_class on the correspondant value of function change(value)
          * @param {number} value is a dataset id
@@ -303,13 +296,13 @@ function showModalGaleryPhoto() {
     modal_close1.addEventListener("click", hideModalGaleryPhoto) //make the click active on button 'close'   
     modal_close2.addEventListener("click", hideModalGaleryPhoto)//make the click active 
     button_add_picture.addEventListener("click", showModalAddPhoto)
-    /*  deleteWorks()//manages trash buttons in modal,can be used in showModalGaleryPhoto because trashes exist */
+   
 }
 /**
  * move display modal off
  */
 function hideModalGaleryPhoto() {
-    const body = document.querySelector("body") //get the first main tag
+    /* const body = document.querySelector("body") //get the first main tag */
     const cover_page = document.querySelector(".cover_page")
     const modal = document.querySelector(".modal")
     cover_page.remove()//delete page over index.html
@@ -330,7 +323,7 @@ function showModalAddPhoto() {
     main.append(modal2)//create a new section with the clone on main
     /* end of modal 2 */
 
-    /* next code manages the arrow and the cross and the cover page click too, in order to remove modal2 by click*/
+    /* next code manages the arrow and the cross and the cover page click to, in order to remove modal2 by click*/
     modal2 = document.querySelector(".modal2")
     const arrow2 = document.getElementById("modal2_arrow_left")
     const cross2 = document.getElementById("cross2")
@@ -346,12 +339,12 @@ function showModalAddPhoto() {
     /* end of arrow and cross */
 
     /* next code manages the content of "catégories input form*/
-    /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r)) */
+    
     categories.then((reponse) => {
-        let category_tag = document.getElementById("category")
+        let category_tag = document.getElementById("category")//get the input category
         /* console.log(reponse) */
 
-        for (let item of reponse) {
+        for (let item of reponse) {//set option on the input category
             /* console.log(item) */
             let option = document.createElement("option")
             option.innerText = `${item.name}`
@@ -363,7 +356,7 @@ function showModalAddPhoto() {
     })
 
     /* next code manages the file to add on the canva when you click on button inside the canva*/
-    const load_file = document.getElementById("addPhotos")
+    const load_file = document.getElementById("addPhotos")//get the button addphoto
     load_file.addEventListener("change", function (event) {
         formData.append("image", this.files[0])//add to formdata in order to be sent to the serveur
         previewFile(this.files[0])
@@ -388,7 +381,10 @@ function showModalAddPhoto() {
 
     drop_file.addEventListener('drop', processData)
 
-
+    /**
+     * this function add the image which you have dropped on the canva in formdata
+     * @param {ImageData} event 
+     */
     function processData(event) {
         event.preventDefault()
         drop_file.classList.toggle("dragover")//toggle blur when file is dropped
@@ -421,8 +417,8 @@ function showModalAddPhoto() {
             return
         }
 
-        const file_reader = new FileReader()
-        file_reader.readAsDataURL(file)
+        const file_reader = new FileReader()//https://fr.javascript.info/file
+        file_reader.readAsDataURL(file)//https://developer.mozilla.org/fr/docs/Web/API/FileReader
         file_reader.addEventListener("load", (event) => imageAndForm_manage(event, file))
         /* console.log (file) */
 
@@ -490,7 +486,7 @@ function showModalAddPhoto() {
                             works_fetch = fetchWorks()//mandatory to upload the new work
                             /* console.log(works_fetch) */
                             displayGallery()//display gallery with the new work
-                            displayGallery(0, tag, 1)//gallery display in modal
+                            displayGallery(0, tag, true)//gallery display in modal
                             /* console.log ("display ok") */
                         }).then(() => {
                             /*  console.log ("modal2.remove ok") */
@@ -517,8 +513,8 @@ function goToEditorMode() {
     nav_login.removeEventListener("click", toggleMain)//remove action of the  login/logout button of the header              
     toggleMain()/* go to the editor-main-mode */
     toggleModeEditionBar()// move on display of header edition mode
-    ToggleButtonBarClassDisplay()//delete display og gallery search
-    toggleSupervisorAccess()//move on dosplay of the button "modifier"
+    ToggleButtonBarClassDisplay()//delete display of gallery search
+    toggleSupervisorAccess()//move on display of the button "modifier"
     nav_login.addEventListener("click", returnToBasicMode);//manages click on login/logout on the header of the website
     supervisor_access.addEventListener("click", showModalGaleryPhoto);//manages click to move modal on
 
@@ -533,6 +529,7 @@ function goToLoginModal() {
     nav_login.addEventListener("click", toggleMain);//manages click on login/logout on the header of the website
 
     /* manages click on submit for autenthication */
+    /* https://developer.mozilla.org/en-US/docs/Web/API/Document/forms */
     document.forms["editor_form"].addEventListener("submit", function (event) {//manages click on form submit "se connecter"        
         event.preventDefault();
         let serverAutenthicationRequest = autenthicationRequest(//call function autenthicationRequest with 2 parameters inside the form
@@ -547,22 +544,20 @@ function goToLoginModal() {
         });
         //treatment of api response
         serverAutenthicationRequest.then(/* response is an object with userid and token */
-            response => {/* in this part of code acces is confirmed so it can manage a new stage */
-
-                /* sessionStorage.setItem("userId", response.userId)//store userId on session storage */
+            response => {/* in this part of code acces is confirmed so it can manage a new stage */                
                 sessionStorage.setItem("token", response.token)//store token on session storage
-
-                /* works_fetch.then(r => console.log("in autenthication_to_editor_mode works_fetch.then()", r))//fonctionne,   pas besoin du storage    */
+               
                 goToEditorMode()//display editor mode                                
             }
         );
     });
 }
+
 /**
  * this function adds an event "click" on the buttons with a trash on them,deletes correspondant work and refresh the displays of galleries ,it can be used only where trashes are defined
  * @param {} id 
  */
-function deleteWorks() {
+function manageTrashbin() {
     let allTrashes = document.querySelectorAll('.trash')//nodeList
     allTrashes = Array.from(allTrashes)
     /* console.log("trashes=",allTrashes)   */
@@ -572,14 +567,14 @@ function deleteWorks() {
         trash.addEventListener("click", event => {
             if (confirm("Voulez vous supprimer ce contenu ?")) {
                 /* console.log(trash.dataset.id) */
-                const del = deleteWork(trash.dataset.id)
+                const del = deleteWork(trash.dataset.id)//deleteWork return a promise
                 del.then(res => {
                     /*  console.log("ok") */
                     works_fetch = fetchWorks() //mandatory to upload the new work                           
                     works_fetch.then(() => {
                         displayGallery()//display gallery with the new work
-                        displayGallery(0, tag, 1)//gallery display in modal                                                  
-                    }).then(hideModalGaleryPhoto).then(showModalGaleryPhoto)
+                        displayGallery(0, tag, true)//gallery display in modal                                                  
+                    }).then(hideModalGaleryPhoto).then(showModalGaleryPhoto)//refresh of modal
                 })
             }
         })
@@ -597,7 +592,7 @@ goToLoginModal(); //manages login if necessary
 /* let datas_store =JSON.parse(sessionStorage.getItem("datas").toString()) //datas obtaessentialined from the session store */
 /* works_fetch.then(r=>console.log("in main code works_fetch.then()",r))//fonctionne ici */
 let tag = ".gallery_photos"
-displayGallery(0, tag, 1)//gallery display in modal
+displayGallery(0, tag, true)//gallery display in modal
 
 
 
