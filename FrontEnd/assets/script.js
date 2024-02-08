@@ -83,7 +83,7 @@ async function fetchCategories() {
  */
 async function sendWorkToServer(formData) {
     /* to use hidden main code */
-    const token = sessionStorage.getItem("token")   
+    const token = sessionStorage.getItem("token")
 
 
     const r = await fetch("http://localhost:5678/api/works", {
@@ -133,7 +133,7 @@ function displayGallery(arg, selectedTag = '.gallery', trash = false) {
                 /**
                   * displays images in the gallery for each item
                   */
-                function display(trash=false) {
+                function display(trash = false) {
 
                     //internal function available only here which is used to optimise code
                     let figure = document.createElement("figure");
@@ -179,7 +179,7 @@ function displayCategoryButtonsBar() {
 
         let array1 = r.map((item) => [item.category]); //make an array of ARRAYS with categories and unordered id
         let datas = array1.map((item) => item[0]); //datas is an array of OBJECTS with unordered categories and id
-       /* console.log(array1) */
+        /* console.log(array1) */
         datas.sort(function (a, b) {
             //sorting array with ascending id
             return a.id - b.id;
@@ -189,7 +189,7 @@ function displayCategoryButtonsBar() {
         for (let i of datas) {
             tab.push(i.name);
         } //filling the table with the names (STRING) of the ordered categories but with duplicates
-        console.log(tab); 
+        console.log(tab);
         let set = new Set(tab); //this set remove all duplicates (because tab is an array of STRINGs, with objects it doesn't work)
         console.log(set);
 
@@ -296,7 +296,7 @@ function showModalGaleryPhoto() {
     modal_close1.addEventListener("click", hideModalGaleryPhoto) //make the click active on button 'close'   
     modal_close2.addEventListener("click", hideModalGaleryPhoto)//make the click active 
     button_add_picture.addEventListener("click", showModalAddPhoto)
-   
+
 }
 /**
  * move display modal off
@@ -339,7 +339,7 @@ function showModalAddPhoto() {
     /* end of arrow and cross */
 
     /* next code manages the content of "catégories input form*/
-    
+
     categories.then((reponse) => {
         let category_tag = document.getElementById("category")//get the input category
         /* console.log(reponse) */
@@ -493,6 +493,13 @@ function showModalAddPhoto() {
                             modal2.remove()
                         })
                     })
+                    //treatment of errors
+                    send.catch((error) => {
+                        /* manages problems of network */
+                        alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`)
+                        modal2.remove()
+                    });
+
                 }
                 else { modal2.remove() }
             }
@@ -544,9 +551,9 @@ function goToLoginModal() {
         });
         //treatment of api response
         serverAutenthicationRequest.then(/* response is an object with userid and token */
-            response => {/* in this part of code acces is confirmed so it can manage a new stage */                
+            response => {/* in this part of code acces is confirmed so it can manage a new stage */
                 sessionStorage.setItem("token", response.token)//store token on session storage
-               
+
                 goToEditorMode()//display editor mode                                
             }
         );
@@ -576,6 +583,11 @@ function manageTrashbin() {
                         displayGallery(0, tag, true)//gallery display in modal                                                  
                     }).then(hideModalGaleryPhoto).then(showModalGaleryPhoto)//refresh of modal
                 })
+                 //treatment of errors
+                 del.catch((error) => {
+                    /* manages problems of network */
+                    alert(`${error} \n\n SERVEUR INACCESSIBLE \n VEUILLEZ VERIFIER VOTRE CONNEXION AU RESEAU`)                    
+                });
             }
         })
     })
