@@ -64,7 +64,7 @@ async function autenthicationRequest(mail, password) {
         Number(r.status) === 401
             ? alert(`ERREUR : ${r.status} \nVERIFIER EMAIL ET MOT DE PASSE`)
             : alert(
-                `ERREUR : ${r.status} \nProblème de réseau,veuillez réessayer ulterieurement`
+                `ERREUR : ${r.status} \nVERIFIER EMAIL ET MOT DE PASSE`
             );
     }
 }
